@@ -1,0 +1,1740 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito+Sans:wght@300;400;600;700&family=Caveat:wght@600&display=swap" rel="stylesheet">
+<style>
+html,body{margin:0;padding:0}
+body{background:#241610;font-family:'Nunito Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#E08A22;text-decoration:none}
+a:hover{color:#B96A12}
+*{box-sizing:border-box}
+#croke-scroll::-webkit-scrollbar{width:0}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes toastIn{from{opacity:0;transform:translate(-50%,14px)}to{opacity:1;transform:translate(-50%,0)}}
+</style>
+</helmet>
+
+<div style="min-height:100vh;padding:38px 20px 60px;background:radial-gradient(1100px 560px at 50% -10%,#3A2416 0%,#241610 62%);display:flex;flex-direction:column;align-items:center;gap:24px">
+
+  <div style="display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center">
+    <div style="font:600 10px/1 'Nunito Sans';letter-spacing:.32em;text-transform:uppercase;color:#F0A81E">Progressive Web App · Mobile first</div>
+    <div style="font:800 34px/1.05 'Baloo 2',cursive;color:#F7EAD2;letter-spacing:.01em">CROKÉ</div>
+    <div style="font:600 20px/1 Caveat,cursive;color:#5C9450">Le plaisir de croquer.</div>
+    <div style="font:300 13px/1.5 'Nunito Sans';color:rgba(247,234,210,.5);max-width:520px;margin-top:4px">4 saveurs · 4 formats de 150 ml à 1 L — parcours complet, de la vitrine au back-office.</div>
+  </div>
+
+  <div style="display:flex;flex-wrap:wrap;gap:7px;justify-content:center;max-width:780px">
+    <sc-for list="{{ navChips }}" as="c" hint-placeholder-count="12">
+      <button onClick="{{ c.go }}" style="font:400 11.5px/1 'Nunito Sans';letter-spacing:.04em;padding:9px 13px;border-radius:999px;cursor:pointer;border:1px solid rgba(247,234,210,.16);background:{{ c.bg }};color:{{ c.fg }}" style-hover="border-color:rgba(247,234,210,.45)">{{ c.label }}</button>
+    </sc-for>
+  </div>
+
+  <div style="position:relative;width:390px;height:844px;border-radius:44px;padding:10px;background:linear-gradient(160deg,#6B4526,#1B110B);box-shadow:0 40px 90px -20px rgba(0,0,0,.75),0 0 0 1px rgba(247,234,210,.08)">
+    <div style="position:relative;width:100%;height:100%;border-radius:35px;overflow:hidden;background:#FBF4E7;display:flex;flex-direction:column">
+
+      <div style="flex:none;height:46px;padding:0 24px;display:flex;align-items:flex-end;justify-content:space-between">
+        <div style="font:600 12.5px/1 'Nunito Sans';color:#3B2415;padding-bottom:8px">9:41</div>
+        <div style="display:flex;align-items:center;gap:5px;padding-bottom:9px">
+          <div style="width:15px;height:9px;border-radius:2px;border:1px solid #3B2415"></div>
+          <div style="width:16px;height:9px;border-radius:2px;background:#3B2415"></div>
+        </div>
+      </div>
+
+      <div style="flex:none;padding:6px 18px 12px;display:flex;align-items:center;justify-content:space-between;gap:10px">
+        <div style="display:flex;align-items:center;gap:9px;min-width:0">
+          <sc-if value="{{ showBack }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ back }}" style="flex:none;width:34px;height:34px;border-radius:999px;border:1px solid rgba(59,36,21,.14);background:#fff;color:#3B2415;font:400 15px/1 'Nunito Sans';cursor:pointer">‹</button>
+          </sc-if>
+          <div style="min-width:0">
+            <div style="font:700 18px/1.05 'Baloo 2',cursive;color:#3B2415">{{ title }}</div>
+            <div style="font:600 9px/1.2 'Nunito Sans';letter-spacing:.22em;text-transform:uppercase;color:rgba(59,36,21,.38);margin-top:2px">{{ subtitle }}</div>
+          </div>
+        </div>
+        <button onClick="{{ goCart }}" style="position:relative;flex:none;width:38px;height:38px;border-radius:999px;border:1px solid rgba(59,36,21,.12);background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center">
+          <div style="width:15px;height:13px;border:1.5px solid #3B2415;border-top:none;border-radius:0 0 5px 5px"></div>
+          <sc-if value="{{ hasCart }}" hint-placeholder-val="{{ true }}">
+            <div style="position:absolute;top:-3px;right:-3px;min-width:18px;height:18px;padding:0 5px;border-radius:999px;color:#fff;font:700 10px/18px 'Nunito Sans';text-align:center;background: {{ accent }}">{{ cartCount }}</div>
+          </sc-if>
+        </button>
+      </div>
+
+      <div id="croke-scroll" style="flex:1;overflow-y:auto">
+
+        <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+        <div data-screen-label="Accueil" style="animation:rise .4s ease both">
+          <div style="margin:0 16px;border-radius:26px;overflow:hidden;background:#F7B321;box-shadow:0 14px 30px -12px rgba(59,36,21,.4)">
+            <div role="img" aria-label="CROKÉ — Croquettes snack, le plaisir de croquer" style="height:168px;background-size:cover;background-position:center 52%;background-image: {{ heroCss }}"></div>
+            <div style="padding:16px 20px 20px;background:linear-gradient(180deg,#F7B321,#EE9C12)">
+              <div style="font:700 25px/1.1 'Baloo 2',cursive;color:#3B2415">{{ heroTitle }}</div>
+              <div style="font:400 12.5px/1.5 'Nunito Sans';color:rgba(59,36,21,.72);margin-top:8px">{{ heroSub }}</div>
+              <div style="display:flex;gap:9px;margin-top:16px">
+                <button onClick="{{ goShop }}" style="flex:1;padding:14px 10px;border-radius:999px;border:none;background:#3B2415;color:#F7EAD2;font:700 13px/1 'Nunito Sans';cursor:pointer;min-height:46px">{{ ctaLabel }}</button>
+                <button onClick="{{ goPack }}" style="flex:1;padding:14px 10px;border-radius:999px;border:1.5px solid #3B2415;background:rgba(255,255,255,.35);color:#3B2415;font:700 13px/1 'Nunito Sans';cursor:pointer;min-height:46px">Pack découverte</button>
+              </div>
+            </div>
+          </div>
+
+          <sc-if value="{{ secPromises }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex;gap:8px;padding:16px 16px 4px">
+            <sc-for list="{{ promises }}" as="p" hint-placeholder-count="3">
+              <div style="flex:1;padding:12px 9px;border-radius:16px;background:#fff;border:1px solid rgba(59,36,21,.07);text-align:center">
+                <div style="font:700 14px/1 'Baloo 2',cursive;color:{{ accent }}">{{ p.k }}</div>
+                <div style="font:300 9.5px/1.35 'Nunito Sans';color:rgba(59,36,21,.55);margin-top:5px">{{ p.v }}</div>
+              </div>
+            </sc-for>
+          </div>
+          </sc-if>
+
+          <div style="padding:20px 16px 4px;display:flex;align-items:baseline;justify-content:space-between">
+            <div style="font:700 21px/1 'Baloo 2',cursive;color:#3B2415">Nos 4 saveurs</div>
+            <button onClick="{{ goShop }}" style="background:none;border:none;font:600 11.5px/1 'Nunito Sans';color:#E0761A;cursor:pointer;padding:6px 0">Tout voir →</button>
+          </div>
+          <div style="display:flex;gap:12px;overflow-x:auto;padding:10px 16px 18px">
+            <sc-for list="{{ flavors }}" as="f" hint-placeholder-count="4">
+              <div onClick="{{ f.open }}" style="flex:none;width:142px;cursor:pointer">
+                <div style="height:142px;border-radius:22px;background:{{ f.tint }};display:flex;align-items:center;justify-content:center;padding:10px">
+                  <div role="img" aria-label="Croké saveur {{ f.short }}" style="width:100%;height:100%;border-radius:50%;background-size:contain;background-position:center;background-repeat:no-repeat;background-image: {{ f.imgCss }}"></div>
+                </div>
+                <div style="font:700 14px/1.2 'Nunito Sans';color:#3B2415;margin-top:9px">{{ f.short }}</div>
+                <div style="font:300 11px/1.3 'Nunito Sans';color:rgba(59,36,21,.5);margin-top:2px">dès 1,50 €</div>
+              </div>
+            </sc-for>
+          </div>
+
+          <sc-if value="{{ secFormats }}" hint-placeholder-val="{{ true }}">
+          <div style="margin:4px 16px;padding:18px 20px;border-radius:22px;background:#3B2415">
+            <div style="font:600 9px/1 'Nunito Sans';letter-spacing:.26em;text-transform:uppercase;color:rgba(247,234,210,.5)">Les formats</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px">
+              <sc-for list="{{ formatCards }}" as="f" hint-placeholder-count="4">
+                <div onClick="{{ f.go }}" style="padding:13px 14px;border-radius:16px;background:rgba(247,234,210,.08);border:1px solid rgba(247,234,210,.14);cursor:pointer">
+                  <div style="font:700 17px/1 'Baloo 2',cursive;color:#F7EAD2">{{ f.label }}</div>
+                  <div style="font:700 12.5px/1 'Nunito Sans';color:#F7B321;margin-top:7px">{{ f.price }}</div>
+                  <div style="font:300 10px/1.3 'Nunito Sans';color:rgba(247,234,210,.5);margin-top:5px">{{ f.note }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+
+          </sc-if>
+
+          <sc-if value="{{ secSub }}" hint-placeholder-val="{{ true }}">
+          <div onClick="{{ goSub }}" style="margin:12px 16px;padding:18px 20px;border-radius:22px;background:#EFE6D0;cursor:pointer;border:1px solid rgba(224,118,26,.2);display:flex;align-items:center;justify-content:space-between;gap:14px">
+            <div>
+              <div style="font:600 9px/1 'Nunito Sans';letter-spacing:.26em;text-transform:uppercase;color:{{ accent }}">Abonnement</div>
+              <div style="font:700 18px/1.15 'Baloo 2',cursive;color:#3B2415;margin-top:7px">La bouteille du mois, −15 %</div>
+              <div style="font:300 11px/1.4 'Nunito Sans';color:rgba(59,36,21,.55);margin-top:4px">1 L livré chaque mois, saveur au choix.</div>
+            </div>
+            <div style="flex:none;width:40px;height:40px;border-radius:999px;background:#3B2415;color:#F7EAD2;font:400 16px/40px 'Nunito Sans';text-align:center">→</div>
+          </div>
+
+          </sc-if>
+
+          <sc-if value="{{ secReviews }}" hint-placeholder-val="{{ true }}">
+          <div style="margin:12px 16px 0;padding:18px 20px;border-radius:22px;background:#fff;border:1px solid rgba(59,36,21,.07)">
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <div style="font:700 17px/1 'Baloo 2',cursive;color:#3B2415">Ils croquent, ils parlent</div>
+              <button onClick="{{ goReviews }}" style="background:none;border:none;font:600 11px/1 'Nunito Sans';color:#E0761A;cursor:pointer">4,8 ★ · 164 avis</button>
+            </div>
+            <div style="font:400 13px/1.55 'Nunito Sans';color:rgba(59,36,21,.72);margin-top:10px;font-style:italic">« Le 1 L cacao ne survit pas au trajet retour. Croquant parfait, pas grasse du tout. »</div>
+            <div style="font:300 11px/1 'Nunito Sans';color:rgba(59,36,21,.45);margin-top:8px">Yann K. · Lomé</div>
+          </div>
+
+          </sc-if>
+
+          <sc-if value="{{ secStory }}" hint-placeholder-val="{{ true }}">
+          <div onClick="{{ goBrand }}" style="margin:12px 16px 22px;padding:16px 20px;border-radius:22px;border:1px dashed rgba(59,36,21,.22);cursor:pointer;display:flex;align-items:center;gap:14px">
+            <img src="uploads/nature.jpeg" alt="Logo Croké" style="flex:none;width:50px;height:50px;border-radius:50%;object-fit:cover">
+            <div>
+              <div style="font:700 13px/1.2 'Nunito Sans';color:#3B2415">La maison Croké</div>
+              <div style="font:300 11px/1.4 'Nunito Sans';color:rgba(59,36,21,.5);margin-top:3px">Une friteuse, quatre saveurs, zéro conservateur.</div>
+            </div>
+          </div>
+          </sc-if>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ isShop }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Boutique" style="animation:rise .35s ease both">
+          <div style="display:flex;gap:7px;overflow-x:auto;padding:2px 16px 14px">
+            <sc-for list="{{ shopFilters }}" as="c" hint-placeholder-count="5">
+              <button onClick="{{ c.pick }}" style="flex:none;padding:9px 15px;border-radius:999px;cursor:pointer;font:600 12px/1 'Nunito Sans';min-height:38px;border:1px solid {{ c.bd }};background:{{ c.bg }};color:{{ c.fg }}">{{ c.name }}</button>
+            </sc-for>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:12px;padding:0 16px 24px">
+            <sc-for list="{{ shopList }}" as="f" hint-placeholder-count="4">
+              <div style="padding:14px;border-radius:24px;background:#fff;border:1px solid rgba(59,36,21,.07)">
+                <div style="display:flex;gap:14px;align-items:center">
+                  <div onClick="{{ f.open }}" style="flex:none;width:86px;height:86px;border-radius:50%;background:{{ f.tint }};display:flex;align-items:center;justify-content:center;cursor:pointer;padding:5px">
+                    <div role="img" aria-label="Croké saveur {{ f.short }}" style="width:100%;height:100%;border-radius:50%;background-size:cover;background-position:center;background-image: {{ f.imgCss }}"></div>
+                  </div>
+                  <div style="flex:1;min-width:0" onClick="{{ f.open }}">
+                    <div style="display:flex;align-items:center;gap:7px">
+                      <div style="font:700 15px/1.2 'Nunito Sans';color:#3B2415">{{ f.short }}</div>
+                      <div style="padding:3px 8px;border-radius:999px;background:{{ f.tint }};font:700 8.5px/1.3 'Nunito Sans';letter-spacing:.1em;text-transform:uppercase;color:{{ f.accent }}">{{ f.tag }}</div>
+                    </div>
+                    <div style="font:300 11.5px/1.45 'Nunito Sans';color:rgba(59,36,21,.55);margin-top:5px">{{ f.pitch }}</div>
+                    <div style="font:600 11px/1 'Nunito Sans';color:#E0761A;margin-top:7px">{{ f.stars }} · {{ f.reviews }} avis</div>
+                  </div>
+                </div>
+                <div style="display:flex;gap:7px;margin-top:13px">
+                  <sc-for list="{{ f.formats }}" as="fo" hint-placeholder-count="4">
+                    <button onClick="{{ fo.add }}" style="flex:1;padding:9px 4px;border-radius:14px;cursor:pointer;border:1px solid rgba(59,36,21,.12);background:#FBF4E7;min-height:52px" style-hover="border-color:#E0761A;background:#fff">
+                      <div style="font:700 11.5px/1 'Nunito Sans';color:#3B2415">{{ fo.label }}</div>
+                      <div style="font:400 11px/1 'Nunito Sans';color:#E0761A;margin-top:6px">{{ fo.price }}</div>
+                    </button>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ isProduct }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Fiche produit" style="animation:rise .35s ease both;padding-bottom:20px">
+          <div style="margin:0 16px;height:270px;border-radius:26px;background:{{ pr.tint }};display:flex;align-items:center;justify-content:center;padding:22px">
+            <div role="img" aria-label="Croké saveur {{ pr.short }}" style="width:226px;height:226px;border-radius:50%;background-size:cover;background-position:center;box-shadow:0 14px 26px rgba(59,36,21,.22);background-image: {{ pr.imgCss }}"></div>
+          </div>
+          <div style="padding:18px 20px 0">
+            <div style="font:700 26px/1.1 'Baloo 2',cursive;color:#3B2415">{{ pr.name }}</div>
+            <div style="font:600 10px/1 'Nunito Sans';letter-spacing:.16em;text-transform:uppercase;color:#E0761A;margin-top:8px">{{ pr.stars }} · {{ pr.reviews }} avis</div>
+            <div style="font:400 13.5px/1.65 'Nunito Sans';color:rgba(59,36,21,.72);margin-top:13px;text-wrap:pretty">{{ pr.desc }}</div>
+
+            <div style="font:700 16px/1 'Baloo 2',cursive;color:#3B2415;margin-top:20px">Choisissez le format</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px">
+              <sc-for list="{{ prFormats }}" as="f" hint-placeholder-count="4">
+                <button onClick="{{ f.pick }}" style="text-align:left;padding:13px 14px;border-radius:18px;cursor:pointer;border:1.5px solid {{ f.bd }};background:{{ f.bg }};min-height:74px">
+                  <div style="display:flex;justify-content:space-between;align-items:baseline">
+                    <div style="font:700 15px/1 'Baloo 2',cursive;color:{{ f.fg }}">{{ f.label }}</div>
+                    <div style="font:700 12px/1 'Nunito Sans';color:{{ f.fg }}">{{ f.price }}</div>
+                  </div>
+                  <div style="font:300 10px/1.35 'Nunito Sans';color:{{ f.sub }};margin-top:7px">{{ f.note }}</div>
+                </button>
+              </sc-for>
+            </div>
+
+            <div style="display:flex;align-items:center;gap:12px;margin-top:16px">
+              <div style="flex:none;display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:999px;background:#fff;border:1px solid rgba(59,36,21,.12)">
+                <button onClick="{{ qtyDec }}" style="width:30px;height:30px;border-radius:999px;border:1px solid rgba(59,36,21,.14);background:#FBF4E7;color:#3B2415;font:400 15px/1 'Nunito Sans';cursor:pointer">−</button>
+                <div style="min-width:16px;text-align:center;font:700 14px/1 'Nunito Sans';color:#3B2415">{{ qty }}</div>
+                <button onClick="{{ qtyInc }}" style="width:30px;height:30px;border-radius:999px;border:none;background:#3B2415;color:#F7EAD2;font:400 15px/1 'Nunito Sans';cursor:pointer">+</button>
+              </div>
+              <button onClick="{{ addProduct }}" style="flex:1;padding:15px 10px;border-radius:999px;border:none;color:#fff;font:700 13.5px/1 'Nunito Sans';cursor:pointer;min-height:50px;background: {{ accent }}">Ajouter · {{ lineTotal }}</button>
+            </div>
+
+            <div style="margin-top:18px;padding:15px 16px;border-radius:18px;background:#fff;border:1px solid rgba(59,36,21,.07);display:flex;flex-direction:column;gap:10px">
+              <sc-for list="{{ prSpecs }}" as="s" hint-placeholder-count="4">
+                <div style="display:flex;justify-content:space-between;gap:10px">
+                  <div style="font:300 11.5px/1.3 'Nunito Sans';color:rgba(59,36,21,.5)">{{ s.k }}</div>
+                  <div style="font:600 11.5px/1.3 'Nunito Sans';color:#3B2415;text-align:right">{{ s.v }}</div>
+                </div>
+              </sc-for>
+            </div>
+
+            <div style="font:700 17px/1 'Baloo 2',cursive;color:#3B2415;margin-top:22px">Les autres saveurs</div>
+            <div style="display:flex;gap:10px;overflow-x:auto;padding:12px 0 4px">
+              <sc-for list="{{ otherFlavors }}" as="f" hint-placeholder-count="3">
+                <div onClick="{{ f.open }}" style="flex:none;width:92px;cursor:pointer">
+                  <div style="height:92px;border-radius:18px;background:{{ f.tint }};display:flex;align-items:center;justify-content:center;padding:7px">
+                    <div role="img" aria-label="Croké {{ f.short }}" style="width:100%;height:100%;border-radius:50%;background-size:cover;background-position:center;background-image: {{ f.imgCss }}"></div>
+                  </div>
+                  <div style="font:600 11px/1.3 'Nunito Sans';color:#3B2415;margin-top:7px">{{ f.short }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ isPack }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Pack" style="animation:rise .35s ease both;padding-bottom:20px">
+          <div style="margin:0 16px;padding:18px 20px;border-radius:22px;background:#3B2415">
+            <div style="font:600 9px/1 'Nunito Sans';letter-spacing:.26em;text-transform:uppercase;color:rgba(247,234,210,.5)">Étape 1 — Le pack</div>
+            <div style="display:flex;flex-direction:column;gap:9px;margin-top:14px">
+              <sc-for list="{{ packs }}" as="p" hint-placeholder-count="2">
+                <button onClick="{{ p.pick }}" style="text-align:left;padding:14px 16px;border-radius:18px;cursor:pointer;border:1.5px solid {{ p.bd }};background:{{ p.bg }};color:{{ p.fg }}">
+                  <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px">
+                    <div style="font:700 17px/1 'Baloo 2',cursive">{{ p.name }}</div>
+                    <div style="font:700 13px/1 'Nunito Sans'">{{ p.price }}</div>
+                  </div>
+                  <div style="font:300 11px/1.4 'Nunito Sans';opacity:.72;margin-top:6px">{{ p.note }}</div>
+                </button>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="padding:20px 20px 8px;display:flex;align-items:baseline;justify-content:space-between">
+            <div style="font:700 18px/1 'Baloo 2',cursive;color:#3B2415">Étape 2 — Vos saveurs</div>
+            <div style="font:700 12px/1 'Nunito Sans';color:#E0761A">{{ packCount }}/{{ packSlots }}</div>
+          </div>
+          <div style="padding:0 20px;display:flex;flex-direction:column;gap:9px">
+            <sc-for list="{{ packRows }}" as="f" hint-placeholder-count="4">
+              <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:18px;background:#fff;border:1px solid rgba(59,36,21,.07)">
+                <div role="img" aria-label="Croké {{ f.short }}" style="flex:none;width:44px;height:44px;border-radius:50%;background-size:cover;background-position:center;background-image: {{ f.imgCss }}"></div>
+                <div style="flex:1;min-width:0">
+                  <div style="font:700 13px/1.2 'Nunito Sans';color:#3B2415">{{ f.short }}</div>
+                  <div style="font:300 10.5px/1.3 'Nunito Sans';color:rgba(59,36,21,.5);margin-top:2px">{{ f.pitch }}</div>
+                </div>
+                <div style="flex:none;display:flex;align-items:center;gap:9px">
+                  <button onClick="{{ f.dec }}" style="width:30px;height:30px;border-radius:999px;border:1px solid rgba(59,36,21,.14);background:#FBF4E7;color:#3B2415;font:400 14px/1 'Nunito Sans';cursor:pointer">−</button>
+                  <div style="min-width:14px;text-align:center;font:700 13px/1 'Nunito Sans';color:#3B2415">{{ f.q }}</div>
+                  <button onClick="{{ f.inc }}" style="width:30px;height:30px;border-radius:999px;border:none;background:#3B2415;color:#F7EAD2;font:400 14px/1 'Nunito Sans';cursor:pointer">+</button>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="margin:18px 20px 0;padding:16px 18px;border-radius:20px;background:#EFE6D0">
+            <div style="font:600 9px/1 'Nunito Sans';letter-spacing:.26em;text-transform:uppercase;color:#E0761A">Étape 3 — Le petit plus</div>
+            <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">
+              <sc-for list="{{ extras }}" as="e" hint-placeholder-count="3">
+                <button onClick="{{ e.pick }}" style="padding:9px 13px;border-radius:999px;cursor:pointer;font:600 11.5px/1 'Nunito Sans';min-height:38px;border:1px solid {{ e.bd }};background:{{ e.bg }};color:{{ e.fg }}">{{ e.label }}</button>
+              </sc-for>
+            </div>
+          </div>
+
+          <div style="margin:18px 20px 0">
+            <button onClick="{{ addPack }}" style="width:100%;padding:16px;border-radius:999px;border:none;background:{{ packBtnBg }};color:#fff;font:700 14px/1 'Nunito Sans';cursor:pointer;min-height:52px">{{ packBtnLabel }}</button>
+          </div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ isCart }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Panier" style="animation:rise .35s ease both;padding:0 16px 20px">
+          <sc-if value="{{ hasCart }}" hint-placeholder-val="{{ true }}">
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <sc-for list="{{ cartLines }}" as="l" hint-placeholder-count="3">
+                <div style="display:flex;gap:12px;align-items:center;padding:12px;border-radius:20px;background:#fff;border:1px solid rgba(59,36,21,.07)">
+                  <div role="img" aria-label="Croké {{ l.name }}" style="flex:none;width:52px;height:52px;border-radius:50%;background-size:cover;background-position:center;background-image: {{ l.imgCss }}"></div>
+                  <div style="flex:1;min-width:0">
+                    <div style="font:700 13px/1.2 'Nunito Sans';color:#3B2415">{{ l.name }}</div>
+                    <div style="font:300 11px/1.3 'Nunito Sans';color:rgba(59,36,21,.5);margin-top:3px">{{ l.unit }}</div>
+                  </div>
+                  <div style="flex:none;display:flex;align-items:center;gap:8px">
+                    <button onClick="{{ l.dec }}" style="width:30px;height:30px;border-radius:999px;border:1px solid rgba(59,36,21,.14);background:#FBF4E7;color:#3B2415;font:400 14px/1 'Nunito Sans';cursor:pointer">−</button>
+                    <div style="min-width:14px;text-align:center;font:700 13px/1 'Nunito Sans';color:#3B2415">{{ l.q }}</div>
+                    <button onClick="{{ l.inc }}" style="width:30px;height:30px;border-radius:999px;border:none;background:#3B2415;color:#F7EAD2;font:400 14px/1 'Nunito Sans';cursor:pointer">+</button>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+            <div style="margin-top:16px;padding:16px 18px;border-radius:20px;background:#EFE6D0">
+              <div style="font:400 12px/1.5 'Nunito Sans';color:#3B2415">{{ freeShipMsg }}</div>
+              <div style="height:6px;border-radius:999px;background:rgba(224,118,26,.2);margin-top:10px;overflow:hidden">
+                <div style="height:100%;border-radius:999px;width: {{ freeShipPct }};background: {{ accent }}"></div>
+              </div>
+            </div>
+            <div style="margin-top:16px;padding:18px;border-radius:20px;background:#fff;border:1px solid rgba(59,36,21,.07);display:flex;flex-direction:column;gap:9px">
+              <sc-for list="{{ totals }}" as="t" hint-placeholder-count="3">
+                <div style="display:flex;justify-content:space-between;gap:10px">
+                  <div style="font:300 12.5px/1.3 'Nunito Sans';color:rgba(59,36,21,.55)">{{ t.k }}</div>
+                  <div style="font:600 12.5px/1.3 'Nunito Sans';color:#3B2415;text-align:right">{{ t.v }}</div>
+                </div>
+              </sc-for>
+              <div style="height:1px;background:rgba(59,36,21,.1);margin:4px 0"></div>
+              <div style="display:flex;justify-content:space-between;align-items:baseline">
+                <div style="font:700 18px/1 'Baloo 2',cursive;color:#3B2415">Total</div>
+                <div style="font:700 18px/1 'Nunito Sans';color:#3B2415">{{ totalLabel }}</div>
+              </div>
+            </div>
+            <button onClick="{{ goCheckout }}" style="width:100%;margin-top:16px;padding:16px;border-radius:999px;border:none;background:#3B2415;color:#F7EAD2;font:700 14px/1 'Nunito Sans';cursor:pointer;min-height:52px" style-hover="background:#E0761A">Commander · {{ totalLabel }}</button>
+          </sc-if>
+          <sc-if value="{{ cartEmpty }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:70px 20px;text-align:center">
+              <img src="uploads/cacao.jpeg" alt="Croké" style="width:84px;height:84px;border-radius:50%;object-fit:cover;opacity:.45">
+              <div style="font:700 21px/1.2 'Baloo 2',cursive;color:#3B2415;margin-top:18px">Panier vide, ça ne croque pas</div>
+              <div style="font:300 12.5px/1.5 'Nunito Sans';color:rgba(59,36,21,.5);margin-top:8px">La friture du jour sort à 11h.</div>
+              <button onClick="{{ goShop }}" style="margin-top:20px;padding:14px 24px;border-radius:999px;border:none;background:#E0761A;color:#fff;font:700 13px/1 'Nunito Sans';cursor:pointer;min-height:46px">Voir la boutique</button>
+            </div>
+          </sc-if>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ isCheckout }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Checkout" style="animation:rise .35s ease both;padding:0 16px 24px">
+          <div style="display:flex;gap:6px;margin-bottom:18px">
+            <sc-for list="{{ steps }}" as="s" hint-placeholder-count="3">
+              <div style="flex:1;height:4px;border-radius:999px;background:{{ s.bg }}"></div>
+            </sc-for>
+          </div>
+
+          <sc-if value="{{ step1 }}" hint-placeholder-val="{{ true }}">
+            <div style="font:700 21px/1.15 'Baloo 2',cursive;color:#3B2415">Comment on vous livre&#8239;?</div>
+            <div style="display:flex;flex-direction:column;gap:10px;margin-top:16px">
+              <sc-for list="{{ modes }}" as="m" hint-placeholder-count="3">
+                <button onClick="{{ m.pick }}" style="text-align:left;padding:15px 16px;border-radius:20px;cursor:pointer;border:1.5px solid {{ m.bd }};background:{{ m.bg }}">
+                  <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+                    <div>
+                      <div style="font:700 13.5px/1.2 'Nunito Sans';color:#3B2415">{{ m.label }}</div>
+                      <div style="font:300 11px/1.4 'Nunito Sans';color:rgba(59,36,21,.5);margin-top:4px">{{ m.note }}</div>
+                    </div>
+                    <div style="flex:none;font:600 12px/1 'Nunito Sans';color:#E0761A">{{ m.price }}</div>
+                  </div>
+                </button>
+              </sc-for>
+            </div>
+            <div style="font:700 17px/1 'Baloo 2',cursive;color:#3B2415;margin-top:22px">Créneau</div>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px">
+              <sc-for list="{{ slots }}" as="s" hint-placeholder-count="4">
+                <button onClick="{{ s.pick }}" style="padding:11px 14px;border-radius:14px;cursor:pointer;font:600 11.5px/1.2 'Nunito Sans';min-height:44px;border:1px solid {{ s.bd }};background:{{ s.bg }};color:{{ s.fg }}">{{ s.label }}</button>
+              </sc-for>
+            </div>
+            <button onClick="{{ next }}" style="width:100%;margin-top:24px;padding:16px;border-radius:999px;border:none;background:#3B2415;color:#F7EAD2;font:700 14px/1 'Nunito Sans';cursor:pointer;min-height:52px">Continuer</button>
+          </sc-if>
+
+          <sc-if value="{{ step2 }}" hint-placeholder-val="{{ false }}">
+            <div style="font:700 21px/1.15 'Baloo 2',cursive;color:#3B2415">Coordonnées</div>
+            <div style="display:flex;flex-direction:column;gap:10px;margin-top:16px">
+              <sc-for list="{{ fields }}" as="f" hint-placeholder-count="4">
+                <div style="padding:12px 15px;border-radius:16px;background:#fff;border:1px solid rgba(59,36,21,.1)">
+                  <div style="font:600 9px/1 'Nunito Sans';letter-spacing:.2em;text-transform:uppercase;color:rgba(59,36,21,.4)">{{ f.k }}</div>
+                  <div style="font:400 13.5px/1.2 'Nunito Sans';color:#3B2415;margin-top:6px">{{ f.v }}</div>
+                </div>
+              </sc-for>
+            </div>
+            <div style="font:700 17px/1 'Baloo 2',cursive;color:#3B2415;margin-top:22px">Paiement</div>
+            <div style="display:flex;flex-direction:column;gap:10px;margin-top:12px">
+              <sc-for list="{{ pays }}" as="p" hint-placeholder-count="3">
+                <button onClick="{{ p.pick }}" style="text-align:left;padding:15px 16px;border-radius:18px;cursor:pointer;border:1.5px solid {{ p.bd }};background:{{ p.bg }}">
+                  <div style="font:700 13px/1.2 'Nunito Sans';color:#3B2415">{{ p.label }}</div>
+                  <div style="font:300 11px/1.4 'Nunito Sans';color:rgba(59,36,21,.5);margin-top:4px">{{ p.note }}</div>
+                </button>
+              </sc-for>
+            </div>
+            <button onClick="{{ placeOrder }}" style="width:100%;margin-top:22px;padding:16px;border-radius:999px;border:none;color:#fff;font:700 14px/1 'Nunito Sans';cursor:pointer;min-height:52px;background: {{ accent }}">Payer {{ totalLabel }}</button>
+            <div style="font:300 10.5px/1.5 'Nunito Sans';color:rgba(59,36,21,.45);text-align:center;margin-top:12px">Paiement sécurisé · Annulation gratuite jusqu'à 9h le jour J</div>
+          </sc-if>
+
+          <sc-if value="{{ step3 }}" hint-placeholder-val="{{ false }}">
+            <div style="padding:34px 4px 0;text-align:center">
+              <div style="width:84px;height:84px;border-radius:50%;margin:0 auto;background:#EFE6D0;display:flex;align-items:center;justify-content:center;font:400 30px/1 'Nunito Sans';color:#E0761A">✓</div>
+              <div style="font:700 24px/1.15 'Baloo 2',cursive;color:#3B2415;margin-top:18px">C'est parti pour la friture&#8239;!</div>
+              <div style="font:300 12.5px/1.6 'Nunito Sans';color:rgba(59,36,21,.55);margin-top:10px">Commande {{ orderRef }} · {{ slotLabel }}<br>{{ modeLabel }}</div>
+              <button onClick="{{ goTrack }}" style="margin-top:22px;padding:15px 26px;border-radius:999px;border:none;background:#3B2415;color:#F7EAD2;font:700 13px/1 'Nunito Sans';cursor:pointer;min-height:48px">Suivre ma commande</button>
+              <div style="margin-top:24px;padding:16px 18px;border-radius:20px;background:#fff;border:1px solid rgba(59,36,21,.07);text-align:left">
+                <div style="font:700 12.5px/1.3 'Nunito Sans';color:#3B2415">+ {{ earnedPoints }} points Croké</div>
+                <div style="font:300 11px/1.5 'Nunito Sans';color:rgba(59,36,21,.5);margin-top:5px">À 500 points, la bouteille 1 L est offert.</div>
+              </div>
+            </div>
+          </sc-if>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ isTrack }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Suivi" style="animation:rise .35s ease both;padding:0 16px 24px">
+          <div style="padding:20px;border-radius:22px;background:#3B2415;color:#F7EAD2">
+            <div style="font:600 9px/1 'Nunito Sans';letter-spacing:.26em;text-transform:uppercase;color:rgba(247,234,210,.5)">Commande {{ orderRef }}</div>
+            <div style="font:700 23px/1.15 'Baloo 2',cursive;margin-top:10px">{{ trackHeadline }}</div>
+            <div style="font:300 11.5px/1.5 'Nunito Sans';color:rgba(247,234,210,.6);margin-top:8px">{{ modeLabel }} · {{ slotLabel }}</div>
+          </div>
+          <div style="margin-top:18px;display:flex;flex-direction:column">
+            <sc-for list="{{ trackSteps }}" as="t" hint-placeholder-count="5">
+              <div style="display:flex;gap:14px">
+                <div style="flex:none;display:flex;flex-direction:column;align-items:center;width:22px">
+                  <div style="width:14px;height:14px;border-radius:50%;background:{{ t.dot }};border:2px solid {{ t.ring }}"></div>
+                  <div style="flex:1;width:2px;background:{{ t.line }}"></div>
+                </div>
+                <div style="padding-bottom:22px">
+                  <div style="font:700 13px/1.2 'Nunito Sans';color:{{ t.fg }}">{{ t.label }}</div>
+                  <div style="font:300 11px/1.45 'Nunito Sans';color:rgba(59,36,21,.45);margin-top:4px">{{ t.note }}</div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+          <button onClick="{{ advanceTrack }}" style="width:100%;padding:14px;border-radius:999px;border:1px solid rgba(59,36,21,.16);background:#fff;color:#3B2415;font:600 12.5px/1 'Nunito Sans';cursor:pointer;min-height:48px">Simuler l'étape suivante</button>
+          <div style="margin-top:14px;padding:16px 18px;border-radius:20px;background:#EFE6D0;display:flex;align-items:center;justify-content:space-between;gap:12px">
+            <div style="font:400 12px/1.5 'Nunito Sans';color:#3B2415">Une question&#8239;? On répond en 5 min sur WhatsApp.</div>
+            <div style="flex:none;padding:10px 14px;border-radius:999px;background:#3B2415;color:#F7EAD2;font:600 11.5px/1 'Nunito Sans'">Écrire</div>
+          </div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ isAccount }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Compte" style="animation:rise .35s ease both;padding:0 16px 24px">
+          <div style="padding:22px;border-radius:24px;background:linear-gradient(150deg,#F7B321,#E0761A);color:#3B2415">
+            <div style="display:flex;justify-content:space-between;align-items:baseline">
+              <div>
+                <div style="font:600 9px/1 'Nunito Sans';letter-spacing:.26em;text-transform:uppercase;opacity:.65">Carte Croké</div>
+                <div style="font:700 24px/1.1 'Baloo 2',cursive;margin-top:8px">Yann Kodjo</div>
+              </div>
+              <div style="text-align:right">
+                <div style="font:700 26px/1 'Nunito Sans'">320</div>
+                <div style="font:600 9.5px/1 'Nunito Sans';letter-spacing:.16em;text-transform:uppercase;opacity:.65;margin-top:5px">points</div>
+              </div>
+            </div>
+            <div style="height:6px;border-radius:999px;background:rgba(59,36,21,.2);margin-top:18px;overflow:hidden">
+              <div style="width:64%;height:100%;background:#3B2415;border-radius:999px"></div>
+            </div>
+            <div style="font:400 11px/1.4 'Nunito Sans';opacity:.8;margin-top:9px">180 points avant la bouteille 1 L offert</div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px">
+            <sc-for list="{{ accountTiles }}" as="a" hint-placeholder-count="4">
+              <button onClick="{{ a.go }}" style="text-align:left;padding:16px;border-radius:20px;border:1px solid rgba(59,36,21,.08);background:#fff;cursor:pointer;min-height:80px">
+                <div style="font:700 13px/1.2 'Nunito Sans';color:#3B2415">{{ a.label }}</div>
+                <div style="font:300 10.5px/1.4 'Nunito Sans';color:rgba(59,36,21,.45);margin-top:6px">{{ a.note }}</div>
+              </button>
+            </sc-for>
+          </div>
+          <div style="font:700 18px/1 'Baloo 2',cursive;color:#3B2415;margin:22px 0 12px">Mes commandes</div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <sc-for list="{{ myOrders }}" as="o" hint-placeholder-count="3">
+              <div onClick="{{ o.go }}" style="display:flex;justify-content:space-between;align-items:center;gap:10px;padding:15px 16px;border-radius:18px;background:#fff;border:1px solid rgba(59,36,21,.07);cursor:pointer">
+                <div style="min-width:0">
+                  <div style="font:700 12.5px/1.2 'Nunito Sans';color:#3B2415">{{ o.ref }} · {{ o.items }}</div>
+                  <div style="font:300 10.5px/1.3 'Nunito Sans';color:rgba(59,36,21,.45);margin-top:4px">{{ o.date }}</div>
+                </div>
+                <div style="flex:none;padding:6px 11px;border-radius:999px;background:{{ o.bg }};color:{{ o.fg }};font:600 10.5px/1 'Nunito Sans'">{{ o.status }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ isSub }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Abonnement" style="animation:rise .35s ease both;padding:0 16px 24px">
+          <div style="font:700 24px/1.15 'Baloo 2',cursive;color:#3B2415">Le club Croké</div>
+          <div style="font:300 12.5px/1.6 'Nunito Sans';color:rgba(59,36,21,.55);margin-top:8px">Votre dose de croquettes livrée chaque mois, saveur au choix, sans engagement.</div>
+          <div style="display:flex;flex-direction:column;gap:12px;margin-top:18px">
+            <sc-for list="{{ plans }}" as="p" hint-placeholder-count="3">
+              <button onClick="{{ p.pick }}" style="text-align:left;padding:18px;border-radius:22px;cursor:pointer;border:1.5px solid {{ p.bd }};background:{{ p.bg }};color:{{ p.fg }}">
+                <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px">
+                  <div style="font:700 20px/1 'Baloo 2',cursive">{{ p.name }}</div>
+                  <div style="font:700 14px/1 'Nunito Sans'">{{ p.price }}</div>
+                </div>
+                <div style="font:300 11.5px/1.5 'Nunito Sans';opacity:.72;margin-top:8px">{{ p.note }}</div>
+                <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:12px">
+                  <sc-for list="{{ p.perks }}" as="k" hint-placeholder-count="2">
+                    <div style="padding:6px 10px;border-radius:999px;background:{{ p.chipBg }};font:600 10.5px/1 'Nunito Sans'">{{ k }}</div>
+                  </sc-for>
+                </div>
+              </button>
+            </sc-for>
+          </div>
+          <button onClick="{{ goCheckout }}" style="width:100%;margin-top:18px;padding:16px;border-radius:999px;border:none;background:#3B2415;color:#F7EAD2;font:700 14px/1 'Nunito Sans';cursor:pointer;min-height:52px">S'abonner · {{ subLabel }}</button>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ isReviews }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Avis" style="animation:rise .35s ease both;padding:0 16px 24px">
+          <div style="display:flex;align-items:center;gap:18px;padding:20px;border-radius:22px;background:#fff;border:1px solid rgba(59,36,21,.07)">
+            <div style="text-align:center">
+              <div style="font:700 38px/1 'Baloo 2',cursive;color:#3B2415">4,8</div>
+              <div style="font:400 11px/1 'Nunito Sans';color:#E0761A;margin-top:6px">★★★★★</div>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;gap:6px">
+              <sc-for list="{{ bars }}" as="b" hint-placeholder-count="5">
+                <div style="display:flex;align-items:center;gap:8px">
+                  <div style="font:300 10px/1 'Nunito Sans';color:rgba(59,36,21,.45);width:8px">{{ b.n }}</div>
+                  <div style="flex:1;height:5px;border-radius:999px;background:rgba(59,36,21,.08);overflow:hidden">
+                    <div style="height:100%;background:#E0761A;border-radius:999px;width: {{ b.w }}"></div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:12px;margin-top:16px">
+            <sc-for list="{{ reviews }}" as="r" hint-placeholder-count="4">
+              <div style="padding:16px 18px;border-radius:20px;background:#fff;border:1px solid rgba(59,36,21,.07)">
+                <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px">
+                  <div style="font:700 12.5px/1 'Nunito Sans';color:#3B2415">{{ r.who }}</div>
+                  <div style="font:400 10.5px/1 'Nunito Sans';color:#E0761A">{{ r.stars }}</div>
+                </div>
+                <div style="font:400 13px/1.6 'Nunito Sans';color:rgba(59,36,21,.72);margin-top:9px">{{ r.text }}</div>
+                <div style="font:300 10px/1 'Nunito Sans';color:rgba(59,36,21,.4);margin-top:9px">{{ r.what }} · {{ r.when }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ isBrand }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Marque" style="animation:rise .35s ease both;padding-bottom:24px">
+          <div style="margin:0 16px;border-radius:26px;overflow:hidden">
+            <img src="uploads/flyer_1.jpeg" alt="Logo CROKÉ — Le plaisir de croquer" style="display:block;width:100%;height:190px;object-fit:cover">
+          </div>
+          <div style="padding:20px 20px 0">
+            <div style="font:600 20px/1 Caveat,cursive;color:#5C9450">Le plaisir de croquer.</div>
+            <div style="font:700 24px/1.15 'Baloo 2',cursive;color:#3B2415;margin-top:8px">Une friteuse, quatre saveurs, aucun compromis.</div>
+            <div style="font:400 13.5px/1.7 'Nunito Sans';color:rgba(59,36,21,.7);margin-top:14px;text-wrap:pretty">Croké, ce sont des croquettes de blé frites le jour même, égouttées à la main et enrobées à froid : cacao, nature, noix de coco, orange. Pas de conservateur, pas d'arôme de synthèse — le croquant tient trois semaines dans son sachet refermable.</div>
+            <div style="font:700 17px/1 'Baloo 2',cursive;color:#3B2415;margin-top:24px">Nos engagements</div>
+            <div style="display:flex;flex-direction:column;gap:10px;margin-top:12px">
+              <sc-for list="{{ values }}" as="v" hint-placeholder-count="4">
+                <div style="display:flex;gap:12px;padding:14px 16px;border-radius:18px;background:#fff;border:1px solid rgba(59,36,21,.07)">
+                  <div style="flex:none;width:8px;height:8px;border-radius:50%;background:#E0761A;margin-top:5px"></div>
+                  <div>
+                    <div style="font:700 12.5px/1.2 'Nunito Sans';color:#3B2415">{{ v.k }}</div>
+                    <div style="font:300 11.5px/1.5 'Nunito Sans';color:rgba(59,36,21,.5);margin-top:4px">{{ v.v }}</div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+            <div style="display:flex;gap:10px;margin-top:18px">
+              <sc-for list="{{ flavorStrip }}" as="f" hint-placeholder-count="4">
+                <div role="img" aria-label="Croké {{ f.short }}" style="flex:1;min-width:0;aspect-ratio:1;border-radius:50%;background-size:cover;background-position:center;border:1px solid rgba(59,36,21,.08);background-image: {{ f.imgCss }}"></div>
+              </sc-for>
+            </div>
+            <div style="margin-top:20px;padding:18px;border-radius:22px;background:#3B2415;color:#F7EAD2">
+              <div style="font:700 18px/1.2 'Baloo 2',cursive">Revendeur, boutique, événement&#8239;?</div>
+              <div style="font:300 11.5px/1.5 'Nunito Sans';color:rgba(247,234,210,.6);margin-top:8px">Tarifs dégressifs dès 50 bouteilles de 1 L, étiquette personnalisable.</div>
+              <button onClick="{{ goCheckout }}" style="margin-top:14px;padding:12px 18px;border-radius:999px;border:none;background:#F7B321;color:#3B2415;font:700 12px/1 'Nunito Sans';cursor:pointer;min-height:44px">Demander un devis</button>
+            </div>
+          </div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ isAdminArea }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;gap:7px;overflow-x:auto;padding:0 16px 14px">
+          <sc-for list="{{ adminTabs }}" as="t" hint-placeholder-count="8">
+            <button onClick="{{ t.go }}" style="flex:none;padding:8px 13px;border-radius:999px;cursor:pointer;font:600 11.5px/1 'Nunito Sans';min-height:36px;border:1px solid {{ t.bd }};background:{{ t.bg }};color:{{ t.fg }}">{{ t.label }}</button>
+          </sc-for>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Back-office" style="animation:rise .35s ease both;padding:0 16px 24px">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <sc-for list="{{ kpis }}" as="k" hint-placeholder-count="4">
+              <div style="padding:15px;border-radius:18px;background:#3B2415;color:#F7EAD2">
+                <div style="font:600 9px/1 'Nunito Sans';letter-spacing:.2em;text-transform:uppercase;color:rgba(247,234,210,.5)">{{ k.k }}</div>
+                <div style="font:700 23px/1 'Baloo 2',cursive;margin-top:9px">{{ k.v }}</div>
+                <div style="font:300 10px/1 'Nunito Sans';color:#F7B321;margin-top:6px">{{ k.d }}</div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="margin-top:18px;padding:16px 18px;border-radius:20px;background:#fff;border:1px solid rgba(59,36,21,.07)">
+            <div style="font:700 12px/1 'Nunito Sans';color:#3B2415">Stock par saveur (en litres)</div>
+            <div style="display:flex;flex-direction:column;gap:9px;margin-top:13px">
+              <sc-for list="{{ stock }}" as="p" hint-placeholder-count="4">
+                <div>
+                  <div style="display:flex;justify-content:space-between;font:400 11px/1.2 'Nunito Sans';color:rgba(59,36,21,.6)">
+                    <div>{{ p.name }}</div><div>{{ p.n }}</div>
+                  </div>
+                  <div style="height:5px;border-radius:999px;background:rgba(59,36,21,.08);margin-top:5px;overflow:hidden">
+                    <div style="height:100%;border-radius:999px;background:{{ p.color }};width: {{ p.w }}"></div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="font:700 18px/1 'Baloo 2',cursive;color:#3B2415;margin:20px 0 12px">Commandes à traiter</div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <sc-for list="{{ adminOrders }}" as="o" hint-placeholder-count="4">
+              <div onClick="{{ o.open }}" style="padding:14px 16px;border-radius:18px;background:#fff;border:1px solid rgba(59,36,21,.07);cursor:pointer">
+                <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px">
+                  <div style="font:700 12.5px/1.2 'Nunito Sans';color:#3B2415">{{ o.ref }} · {{ o.who }}</div>
+                  <div style="font:700 12px/1 'Nunito Sans';color:#3B2415">{{ o.total }}</div>
+                </div>
+                <div style="font:300 10.5px/1.4 'Nunito Sans';color:rgba(59,36,21,.5);margin-top:5px">{{ o.detail }}</div>
+                <div style="display:flex;gap:7px;margin-top:11px;flex-wrap:wrap">
+                  <div style="padding:6px 11px;border-radius:999px;background:{{ o.bg }};color:{{ o.fg }};font:600 10.5px/1 'Nunito Sans'">{{ o.status }}</div>
+                  <div style="padding:6px 11px;border-radius:999px;background:#FBF4E7;border:1px solid rgba(59,36,21,.1);font:400 10.5px/1 'Nunito Sans';color:#3B2415">{{ o.slot }}</div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ isMore }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Plus" style="animation:rise .35s ease both;padding:0 16px 24px">
+          <div style="padding:18px 20px;border-radius:22px;background:#3B2415;color:#F7EAD2;display:flex;align-items:center;justify-content:space-between;gap:14px">
+            <div>
+              <div style="font:700 17px/1.15 'Baloo 2',cursive">Installer Croké</div>
+              <div style="font:300 11px/1.45 'Nunito Sans';color:rgba(247,234,210,.6);margin-top:6px">Ajoutez l'app à votre écran d'accueil : commande en 3 taps, même hors réseau.</div>
+            </div>
+            <button onClick="{{ installApp }}" style="flex:none;padding:11px 15px;border-radius:999px;border:none;background:#F7B321;color:#3B2415;font:700 11.5px/1 'Nunito Sans';cursor:pointer;min-height:44px">Installer</button>
+          </div>
+          <sc-for list="{{ moreGroups }}" as="g" hint-placeholder-count="3">
+            <div style="margin-top:20px">
+              <div style="font:600 9px/1 'Nunito Sans';letter-spacing:.26em;text-transform:uppercase;color:rgba(59,36,21,.4)">{{ g.label }}</div>
+              <div style="display:flex;flex-direction:column;gap:8px;margin-top:11px">
+                <sc-for list="{{ g.items }}" as="i" hint-placeholder-count="4">
+                  <button onClick="{{ i.go }}" style="text-align:left;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border-radius:18px;background:#fff;border:1px solid rgba(59,36,21,.07);cursor:pointer;min-height:48px" style-hover="border-color:rgba(59,36,21,.2)">
+                    <div>
+                      <div style="font:700 12.5px/1.2 'Nunito Sans';color:#3B2415">{{ i.label }}</div>
+                      <div style="font:300 10.5px/1.4 'Nunito Sans';color:rgba(59,36,21,.45);margin-top:4px">{{ i.note }}</div>
+                    </div>
+                    <div style="flex:none;font:400 14px/1 'Nunito Sans';color:rgba(59,36,21,.35)">›</div>
+                  </button>
+                </sc-for>
+              </div>
+            </div>
+          </sc-for>
+          <div style="font:300 10.5px/1.6 'Nunito Sans';color:rgba(59,36,21,.4);text-align:center;margin-top:22px">Croké — Croquettes snack · v1.0.0<br>SIRET [à compléter] · TVA [à compléter]</div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ isDoc }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Document légal" style="animation:rise .35s ease both;padding:0 16px 28px">
+          <div style="padding:16px 18px;border-radius:20px;background:#EFE6D0">
+            <div style="font:700 18px/1.2 'Baloo 2',cursive;color:#3B2415">{{ docTitle }}</div>
+            <div style="font:300 10.5px/1.4 'Nunito Sans';color:rgba(59,36,21,.5);margin-top:6px">Dernière mise à jour : {{ docUpdated }}</div>
+          </div>
+          <div style="font:400 12.5px/1.7 'Nunito Sans';color:rgba(59,36,21,.72);margin-top:16px;text-wrap:pretty">{{ docIntro }}</div>
+          <div style="display:flex;flex-direction:column;gap:14px;margin-top:16px">
+            <sc-for list="{{ docBlocks }}" as="b" hint-placeholder-count="6">
+              <div style="padding:15px 17px;border-radius:18px;background:#fff;border:1px solid rgba(59,36,21,.07)">
+                <div style="font:700 12.5px/1.3 'Nunito Sans';color:#3B2415">{{ b.h }}</div>
+                <div style="font:300 12px/1.65 'Nunito Sans';color:rgba(59,36,21,.65);margin-top:7px;text-wrap:pretty">{{ b.p }}</div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:18px;flex-wrap:wrap">
+            <sc-for list="{{ docSiblings }}" as="d" hint-placeholder-count="4">
+              <button onClick="{{ d.go }}" style="padding:9px 13px;border-radius:999px;cursor:pointer;font:600 11px/1 'Nunito Sans';min-height:38px;border:1px solid {{ d.bd }};background:{{ d.bg }};color:{{ d.fg }}">{{ d.label }}</button>
+            </sc-for>
+          </div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ isFaq }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="FAQ" style="animation:rise .35s ease both;padding:0 16px 28px">
+          <div style="display:flex;flex-direction:column;gap:9px">
+            <sc-for list="{{ faqs }}" as="f" hint-placeholder-count="6">
+              <div style="border-radius:18px;background:#fff;border:1px solid rgba(59,36,21,.07);overflow:hidden">
+                <button onClick="{{ f.toggle }}" style="width:100%;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 16px;background:none;border:none;cursor:pointer;min-height:48px">
+                  <div style="font:700 12.5px/1.35 'Nunito Sans';color:#3B2415">{{ f.q }}</div>
+                  <div style="flex:none;font:400 15px/1 'Nunito Sans';color:{{ f.sign }}">{{ f.icon }}</div>
+                </button>
+                <sc-if value="{{ f.open }}" hint-placeholder-val="{{ false }}">
+                  <div style="padding:0 16px 16px;font:300 12px/1.65 'Nunito Sans';color:rgba(59,36,21,.65)">{{ f.a }}</div>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+          <div style="margin-top:18px;padding:16px 18px;border-radius:20px;background:#EFE6D0;display:flex;align-items:center;justify-content:space-between;gap:12px">
+            <div style="font:400 12px/1.5 'Nunito Sans';color:#3B2415">Pas de réponse à votre question&#8239;?</div>
+            <button onClick="{{ goContact }}" style="flex:none;padding:10px 14px;border-radius:999px;border:none;background:#3B2415;color:#F7EAD2;font:700 11.5px/1 'Nunito Sans';cursor:pointer;min-height:44px">Nous écrire</button>
+          </div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ isContact }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Contact" style="animation:rise .35s ease both;padding:0 16px 28px">
+          <div style="display:flex;gap:9px">
+            <sc-for list="{{ contactTiles }}" as="c" hint-placeholder-count="3">
+              <button onClick="{{ c.go }}" style="flex:1;padding:14px 10px;border-radius:18px;border:1px solid rgba(59,36,21,.08);background:#fff;cursor:pointer;min-height:78px;text-align:left">
+                <div style="font:700 11.5px/1.2 'Nunito Sans';color:#3B2415">{{ c.label }}</div>
+                <div style="font:300 10px/1.4 'Nunito Sans';color:rgba(59,36,21,.45);margin-top:6px">{{ c.note }}</div>
+              </button>
+            </sc-for>
+          </div>
+          <div style="font:700 17px/1 'Baloo 2',cursive;color:#3B2415;margin-top:20px">Écrivez-nous</div>
+          <div style="display:flex;flex-direction:column;gap:10px;margin-top:12px">
+            <sc-for list="{{ contactFields }}" as="f" hint-placeholder-count="4">
+              <div style="padding:12px 15px;border-radius:16px;background:#fff;border:1px solid rgba(59,36,21,.1);min-height:{{ f.h }}">
+                <div style="font:600 9px/1 'Nunito Sans';letter-spacing:.2em;text-transform:uppercase;color:rgba(59,36,21,.4)">{{ f.k }}</div>
+                <div style="font:400 13px/1.5 'Nunito Sans';color:rgba(59,36,21,.45);margin-top:7px">{{ f.v }}</div>
+              </div>
+            </sc-for>
+          </div>
+          <button onClick="{{ sendContact }}" style="width:100%;margin-top:16px;padding:16px;border-radius:999px;border:none;background:#3B2415;color:#F7EAD2;font:700 14px/1 'Nunito Sans';cursor:pointer;min-height:52px">Envoyer le message</button>
+          <div style="margin-top:18px;padding:16px 18px;border-radius:20px;background:#fff;border:1px solid rgba(59,36,21,.07)">
+            <div style="font:700 12.5px/1.2 'Nunito Sans';color:#3B2415">Atelier Croké</div>
+            <div style="font:300 11.5px/1.6 'Nunito Sans';color:rgba(59,36,21,.55);margin-top:7px">[Adresse à compléter], France<br>Lun–Sam · 9h–19h · Dim fermé<br>Réponse sous 24 h ouvrées</div>
+          </div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ isCookies }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Cookies" style="animation:rise .35s ease both;padding:0 16px 28px">
+          <div style="font:400 12.5px/1.7 'Nunito Sans';color:rgba(59,36,21,.7)">Vous choisissez ce que nous mesurons. Les cookies strictement nécessaires au panier et au paiement ne peuvent pas être désactivés ; tous les autres sont désactivés par défaut jusqu'à votre accord.</div>
+          <div style="display:flex;flex-direction:column;gap:10px;margin-top:16px">
+            <sc-for list="{{ cookieRows }}" as="c" hint-placeholder-count="4">
+              <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding:15px 17px;border-radius:18px;background:#fff;border:1px solid rgba(59,36,21,.07)">
+                <div>
+                  <div style="font:700 12.5px/1.2 'Nunito Sans';color:#3B2415">{{ c.label }}</div>
+                  <div style="font:300 11px/1.55 'Nunito Sans';color:rgba(59,36,21,.5);margin-top:5px">{{ c.note }}</div>
+                </div>
+                <button onClick="{{ c.toggle }}" style="flex:none;width:44px;height:26px;border-radius:999px;border:none;cursor:{{ c.cursor }};background:{{ c.trackBg }};padding:3px;display:flex;justify-content:{{ c.justify }}">
+                  <div style="width:20px;height:20px;border-radius:50%;background:#fff"></div>
+                </button>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:flex;gap:9px;margin-top:18px">
+            <button onClick="{{ acceptAll }}" style="flex:1;padding:15px 10px;border-radius:999px;border:none;background:#3B2415;color:#F7EAD2;font:700 13px/1 'Nunito Sans';cursor:pointer;min-height:50px">Tout accepter</button>
+            <button onClick="{{ saveCookies }}" style="flex:1;padding:15px 10px;border-radius:999px;border:1.5px solid #3B2415;background:none;color:#3B2415;font:700 13px/1 'Nunito Sans';cursor:pointer;min-height:50px">Enregistrer</button>
+          </div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ isAdminOrders }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Admin commandes" style="animation:rise .35s ease both;padding:0 16px 24px">
+          <div style="display:flex;gap:7px;overflow-x:auto;padding-bottom:14px">
+            <sc-for list="{{ orderFilters }}" as="f" hint-placeholder-count="5">
+              <button onClick="{{ f.pick }}" style="flex:none;padding:8px 13px;border-radius:999px;cursor:pointer;font:600 11px/1 'Nunito Sans';min-height:36px;border:1px solid {{ f.bd }};background:{{ f.bg }};color:{{ f.fg }}">{{ f.label }}</button>
+            </sc-for>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <sc-for list="{{ filteredOrders }}" as="o" hint-placeholder-count="4">
+              <div onClick="{{ o.open }}" style="padding:14px 16px;border-radius:18px;background:#fff;border:1px solid rgba(59,36,21,.07);cursor:pointer">
+                <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px">
+                  <div style="font:700 12.5px/1.2 'Nunito Sans';color:#3B2415">{{ o.ref }} · {{ o.who }}</div>
+                  <div style="font:700 12px/1 'Nunito Sans';color:#3B2415">{{ o.total }}</div>
+                </div>
+                <div style="font:300 10.5px/1.4 'Nunito Sans';color:rgba(59,36,21,.5);margin-top:5px">{{ o.detail }}</div>
+                <div style="display:flex;gap:7px;margin-top:11px;flex-wrap:wrap;align-items:center">
+                  <div style="padding:6px 11px;border-radius:999px;background:{{ o.bg }};color:{{ o.fg }};font:600 10.5px/1 'Nunito Sans'">{{ o.status }}</div>
+                  <div style="padding:6px 11px;border-radius:999px;background:#FBF4E7;border:1px solid rgba(59,36,21,.1);font:400 10.5px/1 'Nunito Sans';color:#3B2415">{{ o.slot }}</div>
+                  <div style="margin-left:auto;font:600 10.5px/1 'Nunito Sans';color:{{ accent }}">Ouvrir ›</div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ isAdminOrder }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Admin commande" style="animation:rise .35s ease both;padding:0 16px 24px">
+          <div style="padding:18px 20px;border-radius:22px;background:#3B2415;color:#F7EAD2">
+            <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px">
+              <div style="font:700 20px/1.1 'Baloo 2',cursive">{{ ord.ref }}</div>
+              <div style="font:700 15px/1 'Nunito Sans'">{{ ord.total }}</div>
+            </div>
+            <div style="font:300 11.5px/1.6 'Nunito Sans';color:rgba(247,234,210,.62);margin-top:8px">{{ ord.who }} · {{ ord.phone }}<br>{{ ord.address }}<br>{{ ord.slot }} · {{ ord.payment }}</div>
+          </div>
+          <div style="margin-top:14px;padding:16px 18px;border-radius:20px;background:#fff;border:1px solid rgba(59,36,21,.07)">
+            <div style="font:700 12px/1 'Nunito Sans';color:#3B2415">Contenu de la commande</div>
+            <div style="display:flex;flex-direction:column;gap:9px;margin-top:12px">
+              <sc-for list="{{ ord.lines }}" as="l" hint-placeholder-count="3">
+                <div style="display:flex;justify-content:space-between;gap:10px">
+                  <div style="font:400 11.5px/1.4 'Nunito Sans';color:rgba(59,36,21,.7)">{{ l.k }}</div>
+                  <div style="font:600 11.5px/1.4 'Nunito Sans';color:#3B2415;white-space:nowrap">{{ l.v }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="margin-top:14px;padding:16px 18px;border-radius:20px;background:#fff;border:1px solid rgba(59,36,21,.07)">
+            <div style="font:700 12px/1 'Nunito Sans';color:#3B2415">Statut · {{ ord.status }}</div>
+            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px">
+              <sc-for list="{{ statusOptions }}" as="s" hint-placeholder-count="5">
+                <button onClick="{{ s.pick }}" style="padding:9px 13px;border-radius:999px;cursor:pointer;font:600 11px/1 'Nunito Sans';min-height:38px;border:1px solid {{ s.bd }};background:{{ s.bg }};color:{{ s.fg }}">{{ s.label }}</button>
+              </sc-for>
+            </div>
+          </div>
+          <div style="margin-top:14px;padding:15px 17px;border-radius:18px;background:#EFE6D0">
+            <div style="font:600 9px/1 'Nunito Sans';letter-spacing:.2em;text-transform:uppercase;color:{{ accent }}">Note interne</div>
+            <div style="font:400 12px/1.6 'Nunito Sans';color:rgba(59,36,21,.7);margin-top:8px">Client fidèle — prévoir 2 sachets refermables offerts. Interphone parfois HS, appeler avant.</div>
+          </div>
+          <div style="display:flex;gap:9px;margin-top:16px;flex-wrap:wrap">
+            <sc-for list="{{ orderActions }}" as="a" hint-placeholder-count="3">
+              <button onClick="{{ a.go }}" style="flex:1;min-width:100px;padding:13px 10px;border-radius:16px;cursor:pointer;font:700 11.5px/1 'Nunito Sans';min-height:46px;border:1px solid {{ a.bd }};background:{{ a.bg }};color:{{ a.fg }}">{{ a.label }}</button>
+            </sc-for>
+          </div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ isAdminProducts }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Admin produits" style="animation:rise .35s ease both;padding:0 16px 24px">
+          <button onClick="{{ newProduct }}" style="width:100%;padding:14px;border-radius:16px;border:1.5px dashed rgba(59,36,21,.3);background:none;color:#3B2415;font:700 12.5px/1 'Nunito Sans';cursor:pointer;min-height:48px">+ Ajouter un produit</button>
+          <div style="display:flex;flex-direction:column;gap:10px;margin-top:14px">
+            <sc-for list="{{ adminProductList }}" as="p" hint-placeholder-count="4">
+              <div style="padding:13px 14px;border-radius:18px;background:#fff;border:1px solid rgba(59,36,21,.07)">
+                <div style="display:flex;align-items:center;gap:12px">
+                  <div role="img" aria-label="Croké {{ p.short }}" style="flex:none;width:46px;height:46px;border-radius:50%;background-size:cover;background-position:center;background-image: {{ p.imgCss }}"></div>
+                  <div style="flex:1;min-width:0" onClick="{{ p.edit }}">
+                    <div style="font:700 13px/1.2 'Nunito Sans';color:#3B2415">{{ p.short }}</div>
+                    <div style="font:300 10.5px/1.35 'Nunito Sans';color:rgba(59,36,21,.5);margin-top:3px">{{ p.range }} · {{ p.stock }}</div>
+                  </div>
+                  <button onClick="{{ p.toggle }}" style="flex:none;width:44px;height:26px;border-radius:999px;border:none;cursor:pointer;background:{{ p.trackBg }};padding:3px;display:flex;justify-content:{{ p.justify }}">
+                    <div style="width:20px;height:20px;border-radius:50%;background:#fff"></div>
+                  </button>
+                </div>
+                <div style="display:flex;gap:7px;margin-top:11px;flex-wrap:wrap">
+                  <sc-for list="{{ p.chips }}" as="c" hint-placeholder-count="4">
+                    <div style="padding:5px 10px;border-radius:999px;background:#FBF4E7;border:1px solid rgba(59,36,21,.09);font:400 10px/1 'Nunito Sans';color:rgba(59,36,21,.7)">{{ c }}</div>
+                  </sc-for>
+                  <button onClick="{{ p.edit }}" style="margin-left:auto;padding:6px 12px;border-radius:999px;border:none;background:#3B2415;color:#F7EAD2;font:600 10.5px/1 'Nunito Sans';cursor:pointer">Éditer</button>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ isAdminProduct }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Admin produit" style="animation:rise .35s ease both;padding:0 16px 24px">
+          <div style="display:flex;align-items:center;gap:14px;padding:14px;border-radius:20px;background:#fff;border:1px solid rgba(59,36,21,.07)">
+            <div role="img" aria-label="Visuel produit" style="flex:none;width:72px;height:72px;border-radius:50%;background-size:cover;background-position:center;background-image: {{ ed.imgCss }}"></div>
+            <div>
+              <div style="font:700 12.5px/1.2 'Nunito Sans';color:#3B2415">Visuel de l'étiquette</div>
+              <div style="font:300 10.5px/1.45 'Nunito Sans';color:rgba(59,36,21,.5);margin-top:5px">PNG carré, 1200 px min. Déposez le fichier pour remplacer.</div>
+              <button onClick="{{ notImpl }}" style="margin-top:8px;padding:8px 12px;border-radius:999px;border:1px solid rgba(59,36,21,.15);background:#FBF4E7;font:600 10.5px/1 'Nunito Sans';color:#3B2415;cursor:pointer;min-height:36px">Remplacer</button>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px;margin-top:14px">
+            <sc-for list="{{ ed.fields }}" as="f" hint-placeholder-count="4">
+              <div style="padding:12px 15px;border-radius:16px;background:#fff;border:1px solid rgba(59,36,21,.1)">
+                <div style="font:600 9px/1 'Nunito Sans';letter-spacing:.2em;text-transform:uppercase;color:rgba(59,36,21,.4)">{{ f.k }}</div>
+                <div style="font:400 12.5px/1.55 'Nunito Sans';color:#3B2415;margin-top:7px">{{ f.v }}</div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="margin-top:16px;padding:16px 18px;border-radius:20px;background:#fff;border:1px solid rgba(59,36,21,.07)">
+            <div style="font:700 12px/1 'Nunito Sans';color:#3B2415">Prix et stock par format</div>
+            <div style="display:flex;flex-direction:column;gap:10px;margin-top:12px">
+              <sc-for list="{{ ed.formats }}" as="f" hint-placeholder-count="4">
+                <div style="display:flex;align-items:center;gap:10px">
+                  <div style="flex:1;font:600 12px/1 'Nunito Sans';color:#3B2415">{{ f.label }}</div>
+                  <div style="flex:none;padding:8px 12px;border-radius:12px;background:#FBF4E7;border:1px solid rgba(59,36,21,.12);font:700 11.5px/1 'Nunito Sans';color:#3B2415">{{ f.price }}</div>
+                  <div style="flex:none;padding:8px 12px;border-radius:12px;background:#FBF4E7;border:1px solid rgba(59,36,21,.12);font:400 11.5px/1 'Nunito Sans';color:rgba(59,36,21,.6)">{{ f.stock }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="margin-top:14px;padding:16px 18px;border-radius:20px;background:#fff;border:1px solid rgba(59,36,21,.07);display:flex;flex-direction:column;gap:12px">
+            <sc-for list="{{ ed.switches }}" as="s" hint-placeholder-count="3">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:14px">
+                <div>
+                  <div style="font:700 12px/1.2 'Nunito Sans';color:#3B2415">{{ s.label }}</div>
+                  <div style="font:300 10.5px/1.4 'Nunito Sans';color:rgba(59,36,21,.45);margin-top:4px">{{ s.note }}</div>
+                </div>
+                <button onClick="{{ s.toggle }}" style="flex:none;width:44px;height:26px;border-radius:999px;border:none;cursor:pointer;background:{{ s.trackBg }};padding:3px;display:flex;justify-content:{{ s.justify }}">
+                  <div style="width:20px;height:20px;border-radius:50%;background:#fff"></div>
+                </button>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:flex;gap:9px;margin-top:16px">
+            <button onClick="{{ saveProduct }}" style="flex:2;padding:15px 10px;border-radius:999px;border:none;background:{{ accent }};color:#fff;font:700 13px/1 'Nunito Sans';cursor:pointer;min-height:50px">Enregistrer</button>
+            <button onClick="{{ notImpl }}" style="flex:1;padding:15px 10px;border-radius:999px;border:1.5px solid rgba(59,36,21,.18);background:none;color:rgba(59,36,21,.7);font:700 13px/1 'Nunito Sans';cursor:pointer;min-height:50px">Archiver</button>
+          </div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ isAdminContent }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Admin contenu" style="animation:rise .35s ease both;padding:0 16px 24px">
+          <div style="padding:15px 17px;border-radius:18px;background:#EFE6D0;display:flex;align-items:center;justify-content:space-between;gap:12px">
+            <div>
+              <div style="font:700 12.5px/1.2 'Nunito Sans';color:#3B2415">Page d'accueil</div>
+              <div style="font:300 10.5px/1.4 'Nunito Sans';color:rgba(59,36,21,.5);margin-top:4px">{{ contentStatus }}</div>
+            </div>
+            <button onClick="{{ publish }}" style="flex:none;padding:11px 15px;border-radius:999px;border:none;background:#3B2415;color:#F7EAD2;font:700 11.5px/1 'Nunito Sans';cursor:pointer;min-height:44px">Publier</button>
+          </div>
+          <div style="font:700 16px/1 'Baloo 2',cursive;color:#3B2415;margin-top:20px">Textes de la bannière</div>
+          <div style="display:flex;flex-direction:column;gap:10px;margin-top:11px">
+            <sc-for list="{{ copyFields }}" as="f" hint-placeholder-count="3">
+              <div style="padding:12px 15px;border-radius:16px;background:#fff;border:1px solid rgba(59,36,21,.1)">
+                <div style="display:flex;justify-content:space-between;gap:10px">
+                  <div style="font:600 9px/1 'Nunito Sans';letter-spacing:.2em;text-transform:uppercase;color:rgba(59,36,21,.4)">{{ f.k }}</div>
+                  <div style="font:300 9px/1 'Nunito Sans';color:rgba(59,36,21,.35)">{{ f.count }}</div>
+                </div>
+                <div style="font:400 12.5px/1.5 'Nunito Sans';color:#3B2415;margin-top:7px">{{ f.v }}</div>
+                <div style="display:flex;gap:7px;margin-top:9px">
+                  <sc-for list="{{ f.options }}" as="o" hint-placeholder-count="2">
+                    <button onClick="{{ o.pick }}" style="padding:7px 11px;border-radius:999px;cursor:pointer;font:400 10.5px/1.3 'Nunito Sans';min-height:34px;border:1px solid {{ o.bd }};background:{{ o.bg }};color:{{ o.fg }};text-align:left">{{ o.label }}</button>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="font:700 16px/1 'Baloo 2',cursive;color:#3B2415;margin-top:22px">Sections affichées</div>
+          <div style="display:flex;flex-direction:column;gap:9px;margin-top:11px">
+            <sc-for list="{{ sectionRows }}" as="s" hint-placeholder-count="5">
+              <div style="display:flex;align-items:center;gap:12px;padding:13px 15px;border-radius:18px;background:#fff;border:1px solid rgba(59,36,21,.07)">
+                <div style="flex:none;width:16px;display:flex;flex-direction:column;gap:3px">
+                  <div style="height:2px;background:rgba(59,36,21,.25)"></div>
+                  <div style="height:2px;background:rgba(59,36,21,.25)"></div>
+                  <div style="height:2px;background:rgba(59,36,21,.25)"></div>
+                </div>
+                <div style="flex:1;min-width:0">
+                  <div style="font:700 12px/1.2 'Nunito Sans';color:#3B2415">{{ s.label }}</div>
+                  <div style="font:300 10.5px/1.35 'Nunito Sans';color:rgba(59,36,21,.45);margin-top:3px">{{ s.note }}</div>
+                </div>
+                <button onClick="{{ s.toggle }}" style="flex:none;width:44px;height:26px;border-radius:999px;border:none;cursor:pointer;background:{{ s.trackBg }};padding:3px;display:flex;justify-content:{{ s.justify }}">
+                  <div style="width:20px;height:20px;border-radius:50%;background:#fff"></div>
+                </button>
+              </div>
+            </sc-for>
+          </div>
+          <div style="font:700 16px/1 'Baloo 2',cursive;color:#3B2415;margin-top:22px">Pages légales</div>
+          <div style="display:flex;flex-direction:column;gap:9px;margin-top:11px">
+            <sc-for list="{{ legalRows }}" as="l" hint-placeholder-count="4">
+              <button onClick="{{ l.go }}" style="text-align:left;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 15px;border-radius:18px;background:#fff;border:1px solid rgba(59,36,21,.07);cursor:pointer;min-height:46px">
+                <div>
+                  <div style="font:700 12px/1.2 'Nunito Sans';color:#3B2415">{{ l.label }}</div>
+                  <div style="font:300 10.5px/1.35 'Nunito Sans';color:rgba(59,36,21,.45);margin-top:3px">{{ l.note }}</div>
+                </div>
+                <div style="flex:none;padding:5px 10px;border-radius:999px;background:{{ l.bg }};color:{{ l.fg }};font:600 10px/1 'Nunito Sans'">{{ l.state }}</div>
+              </button>
+            </sc-for>
+          </div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ isAdminTheme }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Admin thème" style="animation:rise .35s ease both;padding:0 16px 24px">
+          <div style="padding:18px;border-radius:22px;background:{{ themePreviewBg }};border:1px solid rgba(59,36,21,.08)">
+            <div style="font:600 9px/1 'Nunito Sans';letter-spacing:.24em;text-transform:uppercase;color:rgba(59,36,21,.45)">Aperçu</div>
+            <div style="font:700 20px/1.15 'Baloo 2',cursive;color:#3B2415;margin-top:9px">{{ heroTitle }}</div>
+            <div style="display:flex;gap:8px;margin-top:14px">
+              <div style="padding:12px 16px;border-radius:999px;background:{{ accent }};color:#fff;font:700 12px/1 'Nunito Sans'">{{ ctaLabel }}</div>
+              <div style="padding:12px 16px;border-radius:999px;border:1.5px solid #3B2415;color:#3B2415;font:700 12px/1 'Nunito Sans'">Pack découverte</div>
+            </div>
+          </div>
+          <div style="font:700 16px/1 'Baloo 2',cursive;color:#3B2415;margin-top:20px">Couleur d'accent</div>
+          <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap">
+            <sc-for list="{{ accentSwatches }}" as="s" hint-placeholder-count="6">
+              <button onClick="{{ s.pick }}" style="width:46px;height:46px;border-radius:50%;cursor:pointer;border:3px solid {{ s.ring }};background:{{ s.color }}"></button>
+            </sc-for>
+          </div>
+          <div style="font:700 16px/1 'Baloo 2',cursive;color:#3B2415;margin-top:22px">Bannière d'accueil</div>
+          <div style="display:flex;gap:9px;margin-top:12px">
+            <sc-for list="{{ bannerOptions }}" as="b" hint-placeholder-count="3">
+              <button onClick="{{ b.pick }}" style="flex:1;padding:0;border-radius:16px;overflow:hidden;cursor:pointer;border:2px solid {{ b.bd }};background:#fff">
+                <div role="img" aria-label="{{ b.label }}" style="height:52px;background-size:cover;background-position:center;background-image: {{ b.imgCss }}"></div>
+                <div style="padding:8px 6px;font:600 10.5px/1.2 'Nunito Sans';color:#3B2415">{{ b.label }}</div>
+              </button>
+            </sc-for>
+          </div>
+          <div style="font:700 16px/1 'Baloo 2',cursive;color:#3B2415;margin-top:22px">Réglages d'affichage</div>
+          <div style="margin-top:12px;padding:16px 18px;border-radius:20px;background:#fff;border:1px solid rgba(59,36,21,.07);display:flex;flex-direction:column;gap:14px">
+            <sc-for list="{{ themeSwitches }}" as="s" hint-placeholder-count="3">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:14px">
+                <div>
+                  <div style="font:700 12px/1.2 'Nunito Sans';color:#3B2415">{{ s.label }}</div>
+                  <div style="font:300 10.5px/1.4 'Nunito Sans';color:rgba(59,36,21,.45);margin-top:4px">{{ s.note }}</div>
+                </div>
+                <button onClick="{{ s.toggle }}" style="flex:none;width:44px;height:26px;border-radius:999px;border:none;cursor:pointer;background:{{ s.trackBg }};padding:3px;display:flex;justify-content:{{ s.justify }}">
+                  <div style="width:20px;height:20px;border-radius:50%;background:#fff"></div>
+                </button>
+              </div>
+            </sc-for>
+          </div>
+          <button onClick="{{ applyTheme }}" style="width:100%;margin-top:16px;padding:16px;border-radius:999px;border:none;background:#3B2415;color:#F7EAD2;font:700 14px/1 'Nunito Sans';cursor:pointer;min-height:52px">Appliquer au site</button>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ isAdminPromos }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Admin promos" style="animation:rise .35s ease both;padding:0 16px 24px">
+          <button onClick="{{ notImpl }}" style="width:100%;padding:14px;border-radius:16px;border:1.5px dashed rgba(59,36,21,.3);background:none;color:#3B2415;font:700 12.5px/1 'Nunito Sans';cursor:pointer;min-height:48px">+ Créer un code promo</button>
+          <div style="display:flex;flex-direction:column;gap:10px;margin-top:14px">
+            <sc-for list="{{ promos }}" as="p" hint-placeholder-count="4">
+              <div style="padding:15px 17px;border-radius:18px;background:#fff;border:1px solid rgba(59,36,21,.07)">
+                <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px">
+                  <div style="font:700 13px/1.1 'Nunito Sans';letter-spacing:.08em;color:#3B2415">{{ p.code }}</div>
+                  <div style="padding:5px 10px;border-radius:999px;background:{{ p.bg }};color:{{ p.fg }};font:600 10px/1 'Nunito Sans'">{{ p.state }}</div>
+                </div>
+                <div style="font:300 11px/1.5 'Nunito Sans';color:rgba(59,36,21,.55);margin-top:7px">{{ p.rule }}</div>
+                <div style="display:flex;gap:14px;margin-top:10px">
+                  <div style="font:400 10.5px/1 'Nunito Sans';color:rgba(59,36,21,.45)">Utilisé {{ p.used }}</div>
+                  <div style="font:400 10.5px/1 'Nunito Sans';color:rgba(59,36,21,.45)">CA {{ p.revenue }}</div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ isAdminCustomers }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Admin clients" style="animation:rise .35s ease both;padding:0 16px 24px">
+          <div style="display:flex;gap:9px">
+            <sc-for list="{{ customerKpis }}" as="k" hint-placeholder-count="3">
+              <div style="flex:1;padding:14px 12px;border-radius:18px;background:#fff;border:1px solid rgba(59,36,21,.07);text-align:center">
+                <div style="font:700 19px/1 'Baloo 2',cursive;color:#3B2415">{{ k.v }}</div>
+                <div style="font:300 9.5px/1.3 'Nunito Sans';color:rgba(59,36,21,.5);margin-top:5px">{{ k.k }}</div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px;margin-top:14px">
+            <sc-for list="{{ customers }}" as="c" hint-placeholder-count="4">
+              <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:18px;background:#fff;border:1px solid rgba(59,36,21,.07)">
+                <div style="flex:none;width:38px;height:38px;border-radius:50%;background:#EFE6D0;color:#3B2415;font:700 12px/38px 'Nunito Sans';text-align:center">{{ c.initials }}</div>
+                <div style="flex:1;min-width:0">
+                  <div style="font:700 12.5px/1.2 'Nunito Sans';color:#3B2415">{{ c.name }}</div>
+                  <div style="font:300 10.5px/1.35 'Nunito Sans';color:rgba(59,36,21,.45);margin-top:3px">{{ c.detail }}</div>
+                </div>
+                <div style="flex:none;text-align:right">
+                  <div style="font:700 12px/1 'Nunito Sans';color:#3B2415">{{ c.ltv }}</div>
+                  <div style="font:300 9.5px/1 'Nunito Sans';color:rgba(59,36,21,.45);margin-top:4px">{{ c.tag }}</div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        </sc-if>
+
+        <sc-if value="{{ isAdminSettings }}" hint-placeholder-val="{{ false }}">
+        <div data-screen-label="Admin réglages" style="animation:rise .35s ease both;padding:0 16px 24px">
+          <div style="padding:16px 18px;border-radius:20px;background:#fff;border:1px solid rgba(59,36,21,.07)">
+            <div style="font:700 12px/1 'Nunito Sans';color:#3B2415">Boutique</div>
+            <div style="display:flex;flex-direction:column;gap:11px;margin-top:12px">
+              <sc-for list="{{ shopSettings }}" as="s" hint-placeholder-count="4">
+                <div style="display:flex;justify-content:space-between;gap:12px">
+                  <div style="font:300 11.5px/1.4 'Nunito Sans';color:rgba(59,36,21,.55)">{{ s.k }}</div>
+                  <div style="font:600 11.5px/1.4 'Nunito Sans';color:#3B2415;text-align:right">{{ s.v }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="margin-top:14px;padding:16px 18px;border-radius:20px;background:#fff;border:1px solid rgba(59,36,21,.07);display:flex;flex-direction:column;gap:14px">
+            <sc-for list="{{ settingSwitches }}" as="s" hint-placeholder-count="4">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:14px">
+                <div>
+                  <div style="font:700 12px/1.2 'Nunito Sans';color:#3B2415">{{ s.label }}</div>
+                  <div style="font:300 10.5px/1.4 'Nunito Sans';color:rgba(59,36,21,.45);margin-top:4px">{{ s.note }}</div>
+                </div>
+                <button onClick="{{ s.toggle }}" style="flex:none;width:44px;height:26px;border-radius:999px;border:none;cursor:pointer;background:{{ s.trackBg }};padding:3px;display:flex;justify-content:{{ s.justify }}">
+                  <div style="width:20px;height:20px;border-radius:50%;background:#fff"></div>
+                </button>
+              </div>
+            </sc-for>
+          </div>
+          <div style="margin-top:14px;padding:16px 18px;border-radius:20px;background:#fff;border:1px solid rgba(59,36,21,.07)">
+            <div style="font:700 12px/1 'Nunito Sans';color:#3B2415">Équipe</div>
+            <div style="display:flex;flex-direction:column;gap:10px;margin-top:12px">
+              <sc-for list="{{ team }}" as="t" hint-placeholder-count="3">
+                <div style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+                  <div>
+                    <div style="font:600 11.5px/1.2 'Nunito Sans';color:#3B2415">{{ t.name }}</div>
+                    <div style="font:300 10px/1.3 'Nunito Sans';color:rgba(59,36,21,.45);margin-top:3px">{{ t.mail }}</div>
+                  </div>
+                  <div style="padding:5px 10px;border-radius:999px;background:#EFE6D0;color:#3B2415;font:600 10px/1 'Nunito Sans'">{{ t.role }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="display:flex;gap:9px;margin-top:16px">
+            <button onClick="{{ notImpl }}" style="flex:1;padding:14px 10px;border-radius:16px;border:1px solid rgba(59,36,21,.15);background:#fff;color:#3B2415;font:700 11.5px/1 'Nunito Sans';cursor:pointer;min-height:46px">Exporter CSV</button>
+            <button onClick="{{ notImpl }}" style="flex:1;padding:14px 10px;border-radius:16px;border:1px solid rgba(59,36,21,.15);background:#fff;color:#3B2415;font:700 11.5px/1 'Nunito Sans';cursor:pointer;min-height:46px">Journal d'activité</button>
+          </div>
+        </div>
+        </sc-if>
+
+      </div>
+
+      <sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute;left:50%;bottom:96px;transform:translateX(-50%);padding:12px 18px;border-radius:999px;background:#3B2415;color:#F7EAD2;font:600 12px/1 'Nunito Sans';white-space:nowrap;animation:toastIn .25s ease both;box-shadow:0 12px 30px rgba(0,0,0,.28)">{{ toast }}</div>
+      </sc-if>
+
+      <div style="flex:none;padding:10px 12px 22px;background:rgba(251,244,231,.94);border-top:1px solid rgba(59,36,21,.08);display:flex;justify-content:space-between;backdrop-filter:blur(8px)">
+        <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="5">
+          <button onClick="{{ t.go }}" style="flex:1;min-height:48px;background:none;border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;padding:6px 0">
+            <div style="width:20px;height:20px;border-radius:{{ t.radius }};border:1.5px solid {{ t.color }};background:{{ t.fill }}"></div>
+            <div style="font:600 9.5px/1 'Nunito Sans';letter-spacing:.05em;color:{{ t.color }}">{{ t.label }}</div>
+          </button>
+        </sc-for>
+      </div>
+
+    </div>
+  </div>
+
+  <div style="max-width:600px;text-align:center;font:300 11.5px/1.7 'Nunito Sans';color:rgba(247,234,210,.42)">
+    Visuels : tess étiquettes et logos joints. Formats et prix exacts (150 ml 1,50 € · 250 ml 2,50 € · 350 ml 3,50 € · 1 L 9 €) ; packs, points de fidélité et adresses sont mes propositions à valider.
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;100%&quot;,&quot;height&quot;:1080}}">
+const INK='#3B2415', CREAM='#F7EAD2', SAND='#FBF4E7', ORANGE='#E0761A', GOLD='#F7B321', TAN='#EFE6D0';
+
+const FORMATS=[
+  {id:'150',label:'150 ml',price:1.5,note:'La poche à croquer en route'},
+  {id:'250',label:'250 ml',price:2.5,note:'Le format goûter'},
+  {id:'350',label:'350 ml',price:3.5,note:'Pour deux, ou pas'},
+  {id:'1000',label:'1 L',price:9,note:'La bouteille partage, le moins cher au litre'}
+];
+const F={};FORMATS.forEach(function(f){F[f.id]=f;});
+
+const FLAVORS=[
+  {id:'cacao',short:'Cacao',name:'Croké Cacao',img:'uploads/cacao.jpeg',tint:'#EFE0D2',accent:'#8B4A22',tag:'Best-seller',
+   pitch:'Enrobage cacao amer, croquant franc',rating:4.9,reviews:71,
+   desc:"Notre saveur signature : croquettes de blé frites le matin, enrobées à froid d'un cacao pur non sucré. Amertume douce, zéro effet poudreux, et le croquant qui a fait la réputation de la maison."},
+  {id:'nature',short:'Nature',name:'Croké Nature',img:'uploads/nature.jpeg',tint:'#EFEBD5',accent:'#6F7A2E',tag:'Le classique',
+   pitch:'Juste le blé, le sucre et le sel',rating:4.8,reviews:44,
+   desc:"La recette d'origine, sans habillage : farine de blé, un soupçon de sucre, une pincée de sel. Celle qu'on grignote sans s'arrêter et qui accompagne le thé comme la bière."},
+  {id:'coco',short:'Noix de coco',name:'Croké Noix de coco',img:'uploads/noix-de-coco.jpeg',tint:'#F1EADD',accent:'#9C8757',tag:'Doux',
+   pitch:'Coco râpée torréfiée, note lactée',rating:4.7,reviews:33,
+   desc:"Coco râpée torréfiée au four puis mélangée à chaud pour qu'elle accroche à la croquette. Finale lactée, légèrement grillée — la plus douce de la gamme."},
+  {id:'orange',short:'Orange',name:'Croké Orange',img:'uploads/orange.jpeg',tint:'#FAE8D2',accent:'#D06A12',tag:'Vif',
+   pitch:'Zeste d\u2019orange confit, acidulé',rating:4.7,reviews:26,
+   desc:"Zestes d'orange confits maison et une pointe de fleur d'oranger. Acidulé, parfumé, franchement rafraîchissant : la saveur qui surprend à la première commande."}
+];
+FLAVORS.forEach(function(f){f.imgCss='url('+f.img+')';});
+const FL={};FLAVORS.forEach(function(f){FL[f.id]=f;});
+
+const PACKS=[
+  {id:'p250',name:'Pack Découverte',slots:4,unit:'250',price:9,note:'4 pots de 250 ml au choix — 10 € l\u2019unité par unité, 9 € en pack.'},
+  {id:'p1000',name:'Caisse Partage',slots:4,unit:'1000',price:32,note:'4 bouteilles de 1 L au choix — 36 € séparément, 32 € en caisse.'}
+];
+const PK={};PACKS.forEach(function(p){PK[p.id]=p;});
+
+function sw(on,acc){return {trackBg:on?acc:'rgba(59,36,21,.18)',justify:on?'flex-end':'flex-start'};}
+
+const DOCS={
+  cgv:{short:'CGV',title:'Conditions générales de vente',updated:'20 août 2026',
+    intro:"Les présentes conditions régissent toute commande passée sur l'application Croké. Elles s'appliquent à compter de la validation du paiement et prévalent sur tout autre document.",
+    blocks:[
+      {h:'1. Identité du vendeur',p:'Croké — Croquettes snack, [forme juridique à compléter] au capital de [montant], immatriculée au RCS de [ville] sous le numéro [SIRET]. Siège : [adresse]. TVA intracommunautaire : [numéro].'},
+      {h:'2. Produits',p:'Croquettes de blé frites, vendues au volume en pots refermables de 150 ml, 250 ml, 350 ml et 1 L, en quatre saveurs (cacao, nature, noix de coco, orange). Les photographies d\'étiquettes sont fidèles ; une variation de teinte de l\'enrobage ne constitue pas un défaut.'},
+      {h:'3. Prix',p:'Prix en euros, toutes taxes comprises : 150 ml — 1,50 € ; 250 ml — 2,50 € ; 350 ml — 3,50 € ; 1 L — 9,00 €. Les frais de livraison, indiqués avant paiement, sont offerts dès 25 € d\'achat. Croké peut modifier ses tarifs à tout moment ; le prix applicable est celui affiché au moment de la commande.'},
+      {h:'4. Commande',p:'La commande est ferme dès validation du paiement et réception du courriel de confirmation portant son numéro. Croké peut refuser une commande en cas de litige de paiement antérieur, de quantité anormale ou de zone non desservie.'},
+      {h:'5. Paiement',p:'Paiement par PayPal, virement bancaire ou à la livraison (espèces ou carte auprès du livreur). En cas de virement, la commande est préparée à réception effective des fonds. Aucune donnée bancaire n\'est stockée par Croké.'},
+      {h:'6. Livraison et retrait',p:'Livraison sous 24 h ouvrées sur les zones desservies, dans le créneau choisi. Retrait possible à l\'atelier aux horaires d\'ouverture. En cas d\'absence, le livreur laisse un avis de passage ; une seconde présentation est facturée au tarif de livraison en vigueur.'},
+      {h:'7. Droit de rétractation',p:'Conformément à l\'article L221-28 du Code de la consommation, le droit de rétractation ne s\'applique pas aux denrées alimentaires périssables. Toute commande alimentaire validée est donc définitive.'},
+      {h:'8. Réclamations',p:'Toute réclamation (produit manquant, pot endommagé, erreur de saveur) doit être signalée dans les 48 h suivant la réception, photo à l\'appui, via la page Contact. Croké procède au remplacement ou au remboursement du produit concerné.'},
+      {h:'9. Abonnements',p:'Les formules du club Croké sont sans engagement : résiliation à tout moment depuis le compte client, au plus tard 5 jours avant la date de renvoi. La réduction s\'applique tant que l\'abonnement est actif.'},
+      {h:'10. Données, litiges et droit applicable',p:'Le traitement des données est décrit dans la Politique de confidentialité. Les présentes conditions sont soumises au droit français. En cas de litige, le consommateur peut saisir gratuitement le médiateur [nom du médiateur à compléter] avant toute action judiciaire.'}
+    ]},
+  mentions:{short:'Mentions légales',title:'Mentions légales',updated:'20 août 2026',
+    intro:"Informations légales relatives à l'éditeur et à l'hébergeur de l'application Croké, conformément à la loi n° 2004-575 pour la confiance dans l'économie numérique.",
+    blocks:[
+      {h:'Éditeur',p:'Croké — Croquettes snack, [forme juridique] au capital de [montant]. Siège social : [adresse complète]. RCS [ville] [numéro]. Directeur de la publication : [nom du représentant légal].'},
+      {h:'Contact',p:'Courriel : contact@croke.[ext] · Téléphone : [numéro] · Formulaire : page Contact de l\'application.'},
+      {h:'Hébergement',p:'Application hébergée par [nom de l\'hébergeur], [adresse], [téléphone].'},
+      {h:'Propriété intellectuelle',p:'La marque Croké, le logotype, la signature « Le plaisir de croquer. », les étiquettes de saveur et l\'ensemble des textes et visuels sont protégés. Toute reproduction, même partielle, est interdite sans autorisation écrite.'},
+      {h:'Hygiène et étiquetage',p:'Atelier déclaré auprès de la Direction départementale de la protection des populations. Liste d\'ingrédients et allergènes portés sur chaque étiquette et rappelés sur chaque fiche produit.'},
+      {h:'Signalement',p:'Tout contenu illicite constaté sur l\'application peut être signalé à l\'adresse ci-dessus ; nous accusons réception sous 72 h.'}
+    ]},
+  confidentialite:{short:'Confidentialité',title:'Politique de confidentialité',updated:'20 août 2026',
+    intro:"Croké ne collecte que les données nécessaires à la préparation et à la livraison des commandes. Aucune donnée n'est vendue ni cédée à des fins publicitaires.",
+    blocks:[
+      {h:'Responsable de traitement',p:'Croké — [raison sociale], [adresse]. Contact données : privacy@croke.[ext].'},
+      {h:'Données collectées',p:'Identité et coordonnées (nom, téléphone, adresse de livraison, courriel), historique de commandes et points de fidélité, données techniques minimales (type d\'appareil, pages consultées) si vous acceptez la mesure d\'audience.'},
+      {h:'Finalités et bases légales',p:'Exécution du contrat : traitement des commandes, livraison, service client. Intérêt légitime : prévention de la fraude, amélioration du service. Consentement : mesure d\'audience, envoi d\'offres. Obligation légale : conservation des factures.'},
+      {h:'Durées de conservation',p:'Compte client : 3 ans après la dernière commande. Factures : 10 ans (obligation comptable). Cookies de mesure : 13 mois maximum. Demandes au service client : 2 ans.'},
+      {h:'Destinataires',p:'Prestataire de paiement (PayPal), livreur mandaté, hébergeur et outil de mesure d\'audience. Aucun transfert hors Union européenne sans garanties appropriées.'},
+      {h:'Vos droits',p:'Accès, rectification, effacement, limitation, opposition et portabilité : écrivez à privacy@croke.[ext] avec un justificatif d\'identité ; réponse sous un mois. Vous pouvez également saisir la CNIL (www.cnil.fr).'},
+      {h:'Sécurité',p:'Connexion chiffrée, accès aux commandes restreint aux membres de l\'équipe habilités, journal des accès conservé 12 mois.'}
+    ]},
+  livraison:{short:'Livraison & retours',title:'Livraison, retrait et retours',updated:'20 août 2026',
+    intro:"Tout est frit le matin même : nos délais sont calés sur la production, pas sur un entrepôt.",
+    blocks:[
+      {h:'Zones et délais',p:'Livraison à domicile sous 24 h ouvrées sur les zones desservies, dans le créneau de 2 h choisi au paiement. Commande passée avant 9h : livraison possible le jour même sur le créneau 17h–19h.'},
+      {h:'Frais',p:'2,90 € par commande, offerts dès 25 € d\'achat. Retrait à l\'atelier toujours gratuit, sans minimum.'},
+      {h:'Retrait à l\'atelier',p:'Du lundi au samedi, 9h–19h. Votre commande est mise de côté 48 h ; passé ce délai, elle est remise en vente et remboursée sous forme d\'avoir.'},
+      {h:'Commandes professionnelles',p:'Dès 50 bouteilles de 1 L : devis sous 24 h, étiquette personnalisable, livraison programmée sur créneau dédié, facture unique avec paiement à 30 jours après validation du dossier.'},
+      {h:'Produit non conforme',p:'Signalez-le dans les 48 h avec une photo : remplacement au prochain passage ou remboursement au choix. Les denrées alimentaires ne peuvent pas être reprises pour un autre motif.'},
+      {h:'Conservation',p:'Trois semaines à l\'abri de l\'humidité, pot bien refermé. Ne pas conserver au réfrigérateur : l\'humidité ramollit le croquant.'}
+    ]}
+};
+
+const FAQS=[
+  {q:'Comment sont fabriquées les croquettes\u202F?',a:'Pâte de blé pétrie le matin, découpée, frite en petits bains puis égouttée à la main. L\'enrobage (cacao, coco, zeste d\'orange) est ajouté à froid pour préserver le goût.'},
+  {q:'Combien de temps ça reste croquant\u202F?',a:'Trois semaines dans le pot refermé, à l\'abri de l\'humidité. Le 1 L se referme comme les autres formats, il n\'y a pas de perte de croquant après ouverture.'},
+  {q:'Quel format choisir\u202F?',a:'150 ml pour le sac ou le bureau, 250 ml pour un goûter, 350 ml pour deux, 1 L pour la maison ou un événement — c\'est le format le moins cher au litre (9 € le litre).'},
+  {q:'Y a-t-il des allergènes\u202F?',a:'Toutes les saveurs contiennent du gluten. La saveur noix de coco contient des fruits à coque. Aucun conservateur, aucun colorant, aucun arôme de synthèse.'},
+  {q:'Puis-je payer à la livraison\u202F?',a:'Oui, en espèces ou par carte auprès du livreur. PayPal et le virement bancaire sont également disponibles ; le virement déclenche la préparation à réception des fonds.'},
+  {q:'Vous livrez en dehors de la zone\u202F?',a:'Écrivez-nous avec votre code postal : nous ouvrons de nouvelles tournées chaque mois et nous prévenons les personnes en attente en priorité.'},
+  {q:'Faites-vous des commandes pour événements\u202F?',a:'Oui, dès 50 bouteilles de 1 L avec étiquette personnalisée. Devis sous 24 h depuis la page Contact ou la fiche « Revendeur / événement » au paiement.'}
+];
+
+const SCREENS={
+  home:['CROKÉ','Croquettes snack'],
+  shop:['La boutique','4 saveurs · 4 formats'],
+  product:['Fiche produit','Saveur'],
+  pack:['Composer un pack','Mix & match'],
+  cart:['Panier','Votre commande'],
+  checkout:['Commande','Livraison & paiement'],
+  track:['Suivi','Commande en cours'],
+  account:['Mon compte','Carte Croké'],
+  sub:['Abonnement','Club Croké'],
+  reviews:['Avis clients','164 avis vérifiés'],
+  brand:['La marque','Le plaisir de croquer'],
+  more:['Plus','Aide, légal, espace pro'],
+  doc:['Document','Informations légales'],
+  faq:['Questions fréquentes','On vous répond'],
+  contact:['Contact','Atelier & service client'],
+  cookies:['Cookies','Vos préférences'],
+  admin:['Back-office','Tableau de bord'],
+  adminOrders:['Commandes','Back-office'],
+  adminOrder:['Détail commande','Back-office'],
+  adminProducts:['Produits','Back-office'],
+  adminProduct:['Éditer le produit','Back-office'],
+  adminContent:['Contenu du site','Back-office'],
+  adminTheme:['Thème','Back-office'],
+  adminPromos:['Codes promo','Back-office'],
+  adminCustomers:['Clients','Back-office'],
+  adminSettings:['Réglages','Back-office']
+};
+const ADMIN_SCREENS=['admin','adminOrders','adminOrder','adminProducts','adminProduct','adminContent','adminTheme','adminPromos','adminCustomers','adminSettings'];
+const ORDERS=[
+  {ref:'#CK-1042',who:'Y. Kodjo',phone:'+33 6 24 88 10 07',address:'18 rue du Marché, 93100 Montreuil',total:'14,00 €',detail:'2 × cacao 250 ml + 1 × nature 1 L · PayPal',payment:'PayPal',slot:'Sam. 22 · 10h–12h',status:'À la friture',
+   lines:[{k:'Cacao · 250 ml × 2',v:'5,00 €'},{k:'Nature · 1 L × 1',v:'9,00 €'},{k:'Livraison',v:'Offerte'},{k:'Total TTC',v:'14,00 €'}]},
+  {ref:'#CK-1043',who:'F. Diallo',phone:'+33 7 55 02 41 19',address:'6 allée des Tilleuls, 94200 Ivry',total:'32,00 €',detail:'Caisse Partage 4 × 1 L · virement reçu',payment:'Virement bancaire',slot:'Sam. 22 · 14h–16h',status:'À emballer',
+   lines:[{k:'Caisse Partage (4 × 1 L)',v:'32,00 €'},{k:'Livraison',v:'Offerte'},{k:'Total TTC',v:'32,00 €'}]},
+  {ref:'#CK-1044',who:'Épicerie Bassa',phone:'+33 1 42 60 08 33',address:'Zone Nord, quai 4, 93300 Aubervilliers',total:'450,00 €',detail:'50 bouteilles 1 L · revendeur, étiquette perso',payment:'Virement à 30 jours',slot:'Lun. 24 · 8h–10h',status:'Devis validé',
+   lines:[{k:'Bouteille 1 L × 50 (tarif revendeur)',v:'450,00 €'},{k:'Étiquette personnalisée',v:'Incluse'},{k:'Total HT',v:'450,00 €'}]},
+  {ref:'#CK-1045',who:'M. Lemoine',phone:'+33 6 11 74 90 25',address:'2 place Carnot, 93100 Montreuil',total:'6,00 €',detail:'4 × orange 150 ml · à la livraison',payment:'Paiement à la livraison',slot:'Auj. · 17h–19h',status:'Nouvelle',
+   lines:[{k:'Orange · 150 ml × 4',v:'6,00 €'},{k:'Livraison',v:'2,90 € (à encaisser)'},{k:'Total à encaisser',v:'8,90 €'}]}
+];
+const STATUS_STYLE={'Nouvelle':['#FAE8D2','#D06A12'],'À la friture':['#EFE6D0','#B26312'],'À emballer':['#F3EBD6','#8A6A22'],'Prête':['#E4EDE4','#41703F'],'En livraison':['#E7EAF3','#3E4F87'],'Livrée':['#E9EDE2','#5C7146'],'Devis validé':['#E9EDE2','#5C7146']};
+
+class Component extends DCLogic {
+  state={screen:'home',filter:'Tous',fid:'cacao',fmt:'250',qty:1,
+    packId:'p250',pack:{},extra:'Sachet refermable',
+    cart:{'cacao|250':2,'nature|1000':1},
+    step:1,mode:'Livraison à domicile',slot:'Sam. 22 · 10h–12h',pay:'PayPal',plan:'Duo',track:2,toast:'',
+    doc:'cgv',faqOpen:0,orderFilter:'Toutes',orderRefSel:'#CK-1042',editId:'cacao',
+    statuses:{'#CK-1042':'À la friture','#CK-1043':'À emballer','#CK-1044':'Devis validé','#CK-1045':'Nouvelle'},
+    theme:{accent:'#E0761A',banner:'jaune',perLitre:true,badges:true,stockAlert:true},
+    sections:{promises:true,formats:true,sub:true,reviews:true,story:true},
+    copy:{heroTitle:'La croquette qui craque, servie au volume.',heroSub:'De la poche 150 ml à la bouteille 1 L. Frit du jour, sucré juste ce qu\'il faut.',cta:'Commander'},
+    published:true,
+    avail:{cacao:true,nature:true,coco:true,orange:true},
+    prodFlags:{featured:true,newBadge:false,proOnly:false},
+    cookiePrefs:{essentiels:true,mesure:true,pub:false,perso:false},
+    settingFlags:{paypal:true,cod:true,transfer:true,notif:true}};
+
+  go(s){ this.setState({screen:s, step: s==='checkout'?1:this.state.step}); const el=document.getElementById('croke-scroll'); if(el) el.scrollTop=0; }
+  flash(m){ this.setState({toast:m}); clearTimeout(this._t); this._t=setTimeout(()=>this.setState({toast:''}),1700); }
+  tog(group,key){ const g=Object.assign({},this.state[group]); g[key]=!g[key]; const p={}; p[group]=g; this.setState(p); }
+  setTheme(k,v){ const t=Object.assign({},this.state.theme); t[k]=v; this.setState({theme:t}); }
+  togTheme(k){ const t=Object.assign({},this.state.theme); t[k]=!t[k]; this.setState({theme:t}); }
+  setCopy(k,v){ const c=Object.assign({},this.state.copy); c[k]=v; this.setState({copy:c,published:false}); }
+  add(key,n){ const c=Object.assign({},this.state.cart); c[key]=(c[key]||0)+(n||1); if(c[key]<=0) delete c[key]; this.setState({cart:c}); }
+  money(v){ return (Math.round(v*100)/100).toFixed(2).replace('.',',')+' €'; }
+  lineName(key){
+    const p=key.split('|');
+    if(p[0]==='pack') return PK[p[1]].name+' · '+F[PK[p[1]].unit].label+' ×'+PK[p[1]].slots;
+    return FL[p[0]].short+' · '+F[p[1]].label;
+  }
+  linePrice(key){
+    const p=key.split('|');
+    return p[0]==='pack'?PK[p[1]].price:F[p[1]].price;
+  }
+  lineImg(key){
+    const p=key.split('|');
+    return 'url('+(p[0]==='pack'?'uploads/flyer_3.jpeg':FL[p[0]].img)+')';
+  }
+
+  renderVals(){
+    const st=this.state, self=this;
+    const keys=Object.keys(st.cart);
+    const sub=keys.reduce((s,k)=>s+self.linePrice(k)*st.cart[k],0);
+    const count=keys.reduce((s,k)=>s+st.cart[k],0);
+    const isPickup=st.mode.indexOf('Retrait')===0;
+    const ship=(sub>=25||isPickup)?0:2.9;
+    const total=sub+ship;
+    const fl=FL[st.fid];
+    const ACC=st.theme.accent;
+    const doc=DOCS[st.doc];
+    const BANNERS=[{key:'crème',img:'uploads/flyer_1.jpeg'},{key:'jaune',img:'uploads/flyer_2.jpeg'},{key:'cacao',img:'uploads/cacao.jpeg'}];
+    const banner=(BANNERS.filter(b=>b.key===st.theme.banner)[0]||BANNERS[1]);
+    const ord=Object.assign({},ORDERS.filter(o=>o.ref===st.orderRefSel)[0]||ORDERS[0]);
+    ord.status=st.statuses[ord.ref];
+    const ed=FL[st.editId]||FLAVORS[0];
+    const pack=PK[st.packId];
+    const packCount=Object.keys(st.pack).reduce((s,k)=>s+st.pack[k],0);
+    const packFull=packCount===pack.slots;
+    const lineTotal=F[st.fmt].price*st.qty;
+    const filters=['Tous','Cacao','Nature','Noix de coco','Orange','Packs'];
+    const shopList=st.filter==='Tous'||st.filter==='Packs'?FLAVORS:FLAVORS.filter(f=>f.short===st.filter);
+    const trackDefs=[
+      ['Commande reçue','Paiement confirmé · 09:04'],
+      ['Pâte en préparation','Pétrissage et découpe des croquettes'],
+      ['À la friture','Bain d\u2019huile, égouttage, enrobage'],
+      ['En route','Livreur : Ismaël · suivi en direct'],
+      ['Livré','Bon croquage\u202F!']
+    ];
+    const plans=[
+      {name:'Solo',price:'7,60 €/mois',note:'1 bouteille de 1 L, saveur au choix chaque mois.',perks:['−15 %','Port offert']},
+      {name:'Duo',price:'15,30 €/mois',note:'2 bouteilles de 1 L, deux saveurs différentes.',perks:['−15 %','Port offert','Nouveautés en avant-première']},
+      {name:'Bureau',price:'42 €/mois',note:'6 bouteilles de 1 L livrés au bureau, facture unique.',perks:['−22 %','Facture pro','Livraison programmée']}
+    ];
+    const tabDefs=[
+      ['home','Accueil','30%',['home']],
+      ['shop','Boutique','50%',['shop','product','pack']],
+      ['cart','Panier','0 0 8px 8px',['cart','checkout']],
+      ['account','Compte','50%',['account','track','sub']],
+      ['more','Plus','3px',['more','doc','faq','contact','cookies','reviews','brand'].concat(ADMIN_SCREENS)]
+    ];
+    const stars=v=>v.toFixed(1).replace('.',',')+' ★';
+
+    return {
+      title:st.screen==='product'?fl.short:(st.screen==='doc'?doc.short:SCREENS[st.screen][0]),
+      subtitle:st.screen==='product'?'Croquettes snack':SCREENS[st.screen][1],
+      showBack:['product','pack','checkout','track','sub','reviews','brand','doc','faq','contact','cookies'].concat(ADMIN_SCREENS).indexOf(st.screen)>=0,
+      back:()=>{
+        const s=st.screen;
+        if(s==='product') return self.go('shop');
+        if(['doc','faq','contact','cookies'].indexOf(s)>=0) return self.go('more');
+        if(s==='adminOrder') return self.go('adminOrders');
+        if(s==='adminProduct') return self.go('adminProducts');
+        if(ADMIN_SCREENS.indexOf(s)>=0) return self.go(s==='admin'?'more':'admin');
+        return self.go('home');
+      },
+      accent:ACC,
+      isHome:st.screen==='home',isShop:st.screen==='shop',isProduct:st.screen==='product',isPack:st.screen==='pack',
+      isCart:st.screen==='cart',isCheckout:st.screen==='checkout',isTrack:st.screen==='track',isAccount:st.screen==='account',
+      isSub:st.screen==='sub',isReviews:st.screen==='reviews',isBrand:st.screen==='brand',isAdmin:st.screen==='admin',
+      isMore:st.screen==='more',isDoc:st.screen==='doc',isFaq:st.screen==='faq',isContact:st.screen==='contact',isCookies:st.screen==='cookies',
+      isAdminArea:ADMIN_SCREENS.indexOf(st.screen)>=0,
+      isAdminOrders:st.screen==='adminOrders',isAdminOrder:st.screen==='adminOrder',
+      isAdminProducts:st.screen==='adminProducts',isAdminProduct:st.screen==='adminProduct',
+      isAdminContent:st.screen==='adminContent',isAdminTheme:st.screen==='adminTheme',
+      isAdminPromos:st.screen==='adminPromos',isAdminCustomers:st.screen==='adminCustomers',isAdminSettings:st.screen==='adminSettings',
+      toast:st.toast,
+      goContact:()=>self.go('contact'),
+      notImpl:()=>self.flash('Action de démonstration'),
+      installApp:()=>self.flash('Ajout à l\u2019écran d\u2019accueil'),
+
+      heroTitle:st.copy.heroTitle,heroSub:st.copy.heroSub,ctaLabel:st.copy.cta,
+      heroCss:'url('+banner.img+')',
+      secPromises:st.sections.promises,secFormats:st.sections.formats,secSub:st.sections.sub,
+      secReviews:st.sections.reviews,secStory:st.sections.story,
+
+      moreGroups:[
+        {label:'Commander & suivre',items:[
+          {label:'Suivre ma commande',note:'#CK-1042 · à la friture',go:()=>self.go('track')},
+          {label:'Mon compte et ma carte',note:'320 points Croké',go:()=>self.go('account')},
+          {label:'Club Croké',note:'Abonnement mensuel, −15 %',go:()=>self.go('sub')},
+          {label:'Avis clients',note:'4,8 ★ · 164 avis vérifiés',go:()=>self.go('reviews')}
+        ]},
+        {label:'Aide',items:[
+          {label:'Questions fréquentes',note:'Conservation, formats, allergènes',go:()=>self.go('faq')},
+          {label:'Contact',note:'WhatsApp, courriel, atelier',go:()=>self.go('contact')},
+          {label:'Livraison & retours',note:'Zones, délais, frais, réclamations',go:()=>{self.setState({doc:'livraison'});self.go('doc');}},
+          {label:'La marque',note:'Notre histoire et nos engagements',go:()=>self.go('brand')}
+        ]},
+        {label:'Informations légales',items:[
+          {label:'Conditions générales de vente',note:'Prix, commande, rétractation',go:()=>{self.setState({doc:'cgv'});self.go('doc');}},
+          {label:'Mentions légales',note:'Éditeur, hébergeur, marque',go:()=>{self.setState({doc:'mentions'});self.go('doc');}},
+          {label:'Politique de confidentialité',note:'Données, durées, droits RGPD',go:()=>{self.setState({doc:'confidentialite'});self.go('doc');}},
+          {label:'Préférences cookies',note:'Mesure d\u2019audience et personnalisation',go:()=>self.go('cookies')}
+        ]},
+        {label:'Espace professionnel',items:[
+          {label:'Devenir revendeur',note:'Dès 50 bouteilles, étiquette perso',go:()=>self.go('contact')},
+          {label:'Back-office',note:'Commandes, produits, contenu, thème',go:()=>self.go('admin')}
+        ]}
+      ],
+
+      docTitle:doc.title,docUpdated:doc.updated,docIntro:doc.intro,docBlocks:doc.blocks,
+      docSiblings:Object.keys(DOCS).map(function(k){
+        const on=st.doc===k;
+        return {label:DOCS[k].short,go:()=>{self.setState({doc:k});self.go('doc');},
+          bg:on?INK:'#fff',fg:on?CREAM:INK,bd:on?INK:'rgba(59,36,21,.12)'};
+      }),
+      faqs:FAQS.map(function(f,i){
+        const open=st.faqOpen===i;
+        return {q:f.q,a:f.a,open:open,icon:open?'−':'+',sign:open?ACC:'rgba(59,36,21,.4)',
+          toggle:()=>self.setState({faqOpen:open?-1:i})};
+      }),
+      contactTiles:[
+        {label:'WhatsApp',note:'Réponse en 5 min, 9h–19h',go:()=>self.flash('Ouverture de WhatsApp')},
+        {label:'Courriel',note:'contact@croke.[ext]',go:()=>self.flash('Ouverture du courriel')},
+        {label:'Atelier',note:'Retrait 9h–19h, lun–sam',go:()=>self.flash('Ouverture de l\u2019itinéraire')}
+      ],
+      contactFields:[{k:'Nom',v:'Votre nom',h:'auto'},{k:'Courriel ou téléphone',v:'Pour vous répondre',h:'auto'},
+        {k:'Sujet',v:'Commande · Revendeur · Réclamation · Autre',h:'auto'},{k:'Message',v:'Dites-nous tout…',h:'96px'}],
+      sendContact:()=>self.flash('Message envoyé — réponse sous 24 h'),
+      cookieRows:[
+        {key:'essentiels',label:'Strictement nécessaires',note:'Panier, connexion, paiement. Toujours actifs.',locked:true},
+        {key:'mesure',label:'Mesure d\u2019audience',note:'Pages vues et parcours, en statistiques agrégées. Conservation 13 mois.'},
+        {key:'pub',label:'Publicité',note:'Mesure des campagnes menant à une commande.'},
+        {key:'perso',label:'Personnalisation',note:'Suggestions de saveurs selon vos commandes passées.'}
+      ].map(function(c){
+        const on=c.locked?true:st.cookiePrefs[c.key];
+        return Object.assign({},c,sw(on,c.locked?'rgba(59,36,21,.3)':ACC),{cursor:c.locked?'not-allowed':'pointer',
+          toggle:()=>{if(c.locked){self.flash('Cookies nécessaires : non désactivables');return;}self.tog('cookiePrefs',c.key);}});
+      }),
+      acceptAll:()=>{self.setState({cookiePrefs:{essentiels:true,mesure:true,pub:true,perso:true}});self.flash('Préférences enregistrées');},
+      saveCookies:()=>self.flash('Préférences enregistrées'),
+
+      adminTabs:[['admin','Tableau de bord'],['adminOrders','Commandes'],['adminProducts','Produits'],['adminContent','Contenu'],
+        ['adminTheme','Thème'],['adminPromos','Promos'],['adminCustomers','Clients'],['adminSettings','Réglages']].map(function(t){
+        const on=st.screen===t[0]||(t[0]==='adminOrders'&&st.screen==='adminOrder')||(t[0]==='adminProducts'&&st.screen==='adminProduct');
+        return {label:t[1],go:()=>self.go(t[0]),bg:on?INK:'#fff',fg:on?CREAM:INK,bd:on?INK:'rgba(59,36,21,.12)'};
+      }),
+      orderFilters:['Toutes','Nouvelle','À la friture','À emballer','Livrée'].map(function(f){
+        const on=st.orderFilter===f;
+        return {label:f,pick:()=>self.setState({orderFilter:f}),bg:on?INK:'#fff',fg:on?CREAM:INK,bd:on?INK:'rgba(59,36,21,.12)'};
+      }),
+      filteredOrders:ORDERS.filter(function(o){
+        return st.orderFilter==='Toutes'||st.statuses[o.ref]===st.orderFilter;
+      }).map(function(o){
+        const s=st.statuses[o.ref], style=STATUS_STYLE[s]||['#EFE6D0',INK];
+        return {ref:o.ref,who:o.who,total:o.total,detail:o.detail,slot:o.slot,status:s,bg:style[0],fg:style[1],
+          open:()=>{self.setState({orderRefSel:o.ref});self.go('adminOrder');}};
+      }),
+      ord:ord,
+      statusOptions:['Nouvelle','À la friture','À emballer','Prête','En livraison','Livrée'].map(function(s){
+        const on=ord.status===s;
+        return {label:s,pick:()=>{const m=Object.assign({},st.statuses);m[ord.ref]=s;self.setState({statuses:m});self.flash(ord.ref+' → '+s);},
+          bg:on?INK:'#FBF4E7',fg:on?CREAM:INK,bd:on?INK:'rgba(59,36,21,.12)'};
+      }),
+      orderActions:[
+        {label:'Imprimer l\u2019étiquette',go:()=>self.flash('Étiquette envoyée à l\u2019imprimante'),bg:'#fff',fg:INK,bd:'rgba(59,36,21,.15)'},
+        {label:'Appeler le client',go:()=>self.flash('Appel de '+ord.who),bg:'#fff',fg:INK,bd:'rgba(59,36,21,.15)'},
+        {label:'Rembourser',go:()=>self.flash('Remboursement à confirmer'),bg:'#fff',fg:'#B03A2E',bd:'rgba(176,58,46,.3)'}
+      ],
+      adminProductList:FLAVORS.map(function(f){
+        const on=st.avail[f.id];
+        return Object.assign({},f,sw(on,ACC),{
+          range:'1,50 € – 9,00 €',
+          stock:on?'en stock':'masqué du site',
+          chips:['4 formats',f.tag,on?'Publié':'Brouillon','Stock '+(f.id==='coco'?'faible':'ok')],
+          edit:()=>{self.setState({editId:f.id});self.go('adminProduct');},
+          toggle:()=>{self.tog('avail',f.id);self.flash(f.short+(st.avail[f.id]?' masqué':' publié'));}
+        });
+      }),
+      newProduct:()=>{self.setState({editId:'cacao'});self.go('adminProduct');self.flash('Nouveau produit — modèle pré-rempli');},
+      ed:{
+        imgCss:'url('+ed.img+')',
+        fields:[{k:'Nom du produit',v:ed.name},{k:'Accroche courte',v:ed.pitch},{k:'Description',v:ed.desc},
+          {k:'Catégorie',v:'Croquettes · saveur '+ed.short.toLowerCase()},{k:'Ingrédients / allergènes',v:'Blé, huile, sucre, sel'+(ed.id==='coco'?', noix de coco (fruits à coque)':'')},
+          {k:'Slug (URL)',v:'/produits/croke-'+ed.id},{k:'Titre SEO',v:ed.name+' — croquettes snack au volume'}],
+        formats:FORMATS.map(f=>({label:f.label,price:self.money(f.price),stock:(f.id==='1000'?'12':'48')+' u.'})),
+        switches:[
+          {label:'Mis en avant sur l\u2019accueil',note:'Apparaît dans « Nos 4 saveurs »',key:'featured'},
+          {label:'Badge « Nouveau »',note:'Affiché 30 jours sur la fiche et la liste',key:'newBadge'},
+          {label:'Réservé aux pros',note:'Visible uniquement pour les comptes revendeurs',key:'proOnly'}
+        ].map(function(s){
+          return Object.assign({},s,sw(st.prodFlags[s.key],ACC),{toggle:()=>self.tog('prodFlags',s.key)});
+        })
+      },
+      saveProduct:()=>self.flash(ed.short+' enregistré'),
+
+      contentStatus:st.published?'Publiée · dernière mise à jour aujourd\u2019hui':'Brouillon non publié — 1 modification en attente',
+      publish:()=>{self.setState({published:true});self.flash('Accueil publié');},
+      copyFields:[
+        {k:'Titre de la bannière',key:'heroTitle',opts:['La croquette qui craque, servie au volume.','Croquez-en un litre. On ne juge pas.']},
+        {k:'Sous-titre',key:'heroSub',opts:['De la poche 150 ml à la bouteille 1 L. Frit du jour, sucré juste ce qu\'il faut.','Frit le matin, livré dans la journée. Quatre saveurs, quatre formats.']},
+        {k:'Bouton principal',key:'cta',opts:['Commander','Je croque']}
+      ].map(function(f){
+        const cur=st.copy[f.key];
+        return {k:f.k,v:cur,count:cur.length+' car.',
+          options:f.opts.map(function(o){
+            const on=cur===o;
+            return {label:o.length>34?o.slice(0,32)+'…':o,pick:()=>self.setCopy(f.key,o),
+              bg:on?INK:'#FBF4E7',fg:on?CREAM:INK,bd:on?INK:'rgba(59,36,21,.14)'};
+          })};
+      }),
+      sectionRows:[
+        {key:'promises',label:'Bandeau promesses',note:'Frit du jour · 0 conservateur · dès 1,50 €'},
+        {key:'formats',label:'Bloc « Les formats »',note:'Grille des 4 contenances et prix'},
+        {key:'sub',label:'Encart abonnement',note:'Club Croké, −15 %'},
+        {key:'reviews',label:'Avis mis en avant',note:'Note globale + citation'},
+        {key:'story',label:'Teaser marque',note:'Lien vers l\u2019histoire de la maison'}
+      ].map(function(s){
+        return Object.assign({},s,sw(st.sections[s.key],ACC),{toggle:()=>{self.tog('sections',s.key);self.setState({published:false});}});
+      }),
+      legalRows:Object.keys(DOCS).map(function(k){
+        return {label:DOCS[k].title,note:'Mise à jour '+DOCS[k].updated,state:k==='mentions'?'À compléter':'Publié',
+          bg:k==='mentions'?'#FAE8D2':'#E9EDE2',fg:k==='mentions'?'#D06A12':'#5C7146',
+          go:()=>{self.setState({doc:k});self.go('doc');}};
+      }),
+
+      themePreviewBg:st.theme.banner==='jaune'?'#FBE6B4':(st.theme.banner==='cacao'?'#EFE0D2':'#F6EBD6'),
+      accentSwatches:['#E0761A','#B8474C','#5C9450','#C2410C','#8B4A22','#D9A21B'].map(function(c){
+        return {color:c,pick:()=>self.setTheme('accent',c),ring:st.theme.accent===c?INK:'rgba(59,36,21,.12)'};
+      }),
+      bannerOptions:BANNERS.map(function(b){
+        return {label:'Bannière '+b.key,imgCss:'url('+b.img+')',pick:()=>self.setTheme('banner',b.key),
+          bd:st.theme.banner===b.key?INK:'rgba(59,36,21,.12)'};
+      }),
+      themeSwitches:[
+        {label:'Afficher le prix au litre',note:'Ajoute « x €/L » sous chaque format',key:'perLitre'},
+        {label:'Badges de saveur',note:'Best-seller, Nouveau, Doux… sur les listes',key:'badges'},
+        {label:'Alerte stock faible',note:'Affiche « bientôt épuisé » sous 10 unités',key:'stockAlert'}
+      ].map(function(s){
+        return Object.assign({},s,sw(st.theme[s.key],ACC),{toggle:()=>self.togTheme(s.key)});
+      }),
+      applyTheme:()=>self.flash('Thème appliqué au site'),
+
+      promos:[
+        {code:'CROKE10',rule:'−10 % dès 20 € d\u2019achat · jusqu\u2019au 30 sept.',state:'Actif',used:'84 fois',revenue:'612 €',bg:'#E9EDE2',fg:'#5C7146'},
+        {code:'BIENVENUE',rule:'−2 € sur la première commande · sans minimum',state:'Actif',used:'139 fois',revenue:'1 040 €',bg:'#E9EDE2',fg:'#5C7146'},
+        {code:'LITRE1',rule:'1 L offert dès 40 € · réservé au club',state:'Programmé',used:'0 fois',revenue:'—',bg:'#F3EBD6',fg:'#8A6A22'},
+        {code:'RENTREE24',rule:'−15 % sur les packs · terminé le 15 août',state:'Expiré',used:'207 fois',revenue:'2 480 €',bg:'#EDEAE4',fg:'rgba(59,36,21,.5)'}
+      ],
+      customerKpis:[{k:'Clients actifs',v:'318'},{k:'Réachat',v:'46 %'},{k:'Panier moyen',v:'7,80 €'}],
+      customers:[
+        {initials:'YK',name:'Yann Kodjo',detail:'12 commandes · 320 points · Montreuil',ltv:'148 €',tag:'Club Duo'},
+        {initials:'FD',name:'Fatou Diallo',detail:'7 commandes · 180 points · Ivry',ltv:'96 €',tag:'Fidèle'},
+        {initials:'EB',name:'Épicerie Bassa',detail:'4 commandes · revendeur · Aubervilliers',ltv:'1 780 €',tag:'Pro'},
+        {initials:'ML',name:'Marc Lemoine',detail:'2 commandes · 40 points · Montreuil',ltv:'21 €',tag:'Nouveau'}
+      ],
+      shopSettings:[
+        {k:'Horaires de l\u2019atelier',v:'Lun–Sam · 9h–19h'},
+        {k:'Zones livrées',v:'Montreuil, Ivry, Aubervilliers, Paris 11–20'},
+        {k:'Frais de livraison',v:'2,90 €'},
+        {k:'Livraison offerte dès',v:'25,00 €'},
+        {k:'Capacité de production',v:'60 L / jour'},
+        {k:'Devise et TVA',v:'EUR · 5,5 % (alimentaire)'}
+      ],
+      settingSwitches:[
+        {label:'PayPal',note:'Redirection sécurisée',key:'paypal'},
+        {label:'Paiement à la livraison',note:'Espèces ou carte auprès du livreur',key:'cod'},
+        {label:'Virement bancaire',note:'Préparation à réception des fonds',key:'transfer'},
+        {label:'Notifications push',note:'Alerte à chaque nouvelle commande',key:'notif'}
+      ].map(function(s){
+        return Object.assign({},s,sw(st.settingFlags[s.key],ACC),{toggle:()=>self.tog('settingFlags',s.key)});
+      }),
+      team:[
+        {name:'Awa (fondatrice)',mail:'awa@croke.[ext]',role:'Admin'},
+        {name:'Ismaël',mail:'ismael@croke.[ext]',role:'Livraison'},
+        {name:'Comptabilité',mail:'compta@croke.[ext]',role:'Lecture'}
+      ],
+      goShop:()=>self.go('shop'),goCart:()=>self.go('cart'),goPack:()=>self.go('pack'),goSub:()=>self.go('sub'),
+      goReviews:()=>self.go('reviews'),goBrand:()=>self.go('brand'),goTrack:()=>self.go('track'),
+      goCheckout:()=>{self.setState({step:1});self.go('checkout');},
+
+      navChips:Object.keys(SCREENS).filter(function(k){return ADMIN_SCREENS.indexOf(k)<0||k==='admin';}).map(function(k){
+        const on=st.screen===k;
+        return {label:SCREENS[k][0],go:()=>self.go(k),bg:on?CREAM:'rgba(247,234,210,.06)',fg:on?INK:'rgba(247,234,210,.7)'};
+      }),
+      tabs:tabDefs.map(function(t){
+        const on=t[3].indexOf(st.screen)>=0;
+        return {label:t[1],go:()=>self.go(t[0]),radius:t[2],color:on?ACC:'rgba(59,36,21,.42)',fill:on?ACC:'transparent'};
+      }),
+
+      promises:[{k:'Frit du jour',v:'Jamais de stock de la veille'},{k:'0 conservateur',v:'Croquant 3 semaines'},{k:'Dès 1,50 €',v:'4 formats, du sachet à la bouteille'}],
+      flavors:FLAVORS.map(f=>Object.assign({},f,{open:()=>{self.setState({fid:f.id,qty:1});self.go('product');}})),
+      flavorStrip:FLAVORS,
+      formatCards:FORMATS.map(f=>({label:f.label,price:self.money(f.price),note:f.note,go:()=>{self.setState({fmt:f.id});self.go('shop');}})),
+
+      shopFilters:filters.map(function(c){
+        const on=st.filter===c;
+        return {name:c,pick:()=>{if(c==='Packs'){self.go('pack');return;}self.setState({filter:c});},
+          bg:on?INK:'#fff',fg:on?CREAM:INK,bd:on?INK:'rgba(59,36,21,.12)'};
+      }),
+      shopList:shopList.map(function(f){
+        return Object.assign({},f,{
+          stars:stars(f.rating),
+          open:()=>{self.setState({fid:f.id,qty:1});self.go('product');},
+          formats:FORMATS.map(fo=>({label:fo.label,price:self.money(fo.price),
+            add:()=>{self.add(f.id+'|'+fo.id,1);self.flash(f.short+' '+fo.label+' ajouté');}}))
+        });
+      }),
+
+      pr:Object.assign({},fl,{stars:stars(fl.rating)}),
+      prFormats:FORMATS.map(function(fo){
+        const on=st.fmt===fo.id;
+        const perL=st.theme.perLitre?' · '+self.money(fo.price/(parseInt(fo.id,10)/1000))+'/L':'';
+        return {label:fo.label,price:self.money(fo.price),note:fo.note+perL,pick:()=>self.setState({fmt:fo.id}),
+          bg:on?INK:'#fff',bd:on?INK:'rgba(59,36,21,.1)',fg:on?CREAM:INK,sub:on?'rgba(247,234,210,.6)':'rgba(59,36,21,.5)'};
+      }),
+      qty:st.qty,
+      qtyInc:()=>self.setState({qty:st.qty+1}),
+      qtyDec:()=>self.setState({qty:Math.max(1,st.qty-1)}),
+      lineTotal:self.money(lineTotal),
+      addProduct:()=>{self.add(fl.id+'|'+st.fmt,st.qty);self.flash(fl.short+' '+F[st.fmt].label+' ×'+st.qty+' ajouté');},
+      prSpecs:[{k:'Contenance',v:F[st.fmt].label+' (pot refermable)'},{k:'Poids net',v:F[st.fmt].id==='1000'?'environ 420 g':'environ '+Math.round(F[st.fmt].price/1.5*63)+' g'},
+        {k:'Ingrédients',v:'Blé, huile, sucre, sel'+(fl.id==='nature'?'':' + '+fl.short.toLowerCase())},{k:'Conservation',v:'3 semaines à l\u2019abri de l\u2019humidité'},{k:'Allergènes',v:'Gluten'+(fl.id==='coco'?', fruits à coque':'')}],
+      otherFlavors:FLAVORS.filter(f=>f.id!==fl.id).map(f=>Object.assign({},f,{open:()=>{self.setState({fid:f.id,qty:1});self.go('product');}})),
+
+      packs:PACKS.map(function(p){
+        const on=st.packId===p.id;
+        return {name:p.name,price:self.money(p.price),note:p.note,pick:()=>self.setState({packId:p.id,pack:{}}),
+          bg:on?CREAM:'rgba(247,234,210,.07)',fg:on?INK:CREAM,bd:on?CREAM:'rgba(247,234,210,.2)'};
+      }),
+      packSlots:pack.slots,packCount:packCount,
+      packRows:FLAVORS.map(function(f){
+        const q=st.pack[f.id]||0;
+        return Object.assign({},f,{q:q,
+          inc:()=>{if(packCount>=pack.slots){self.flash('Pack complet ('+pack.slots+')');return;}const b=Object.assign({},st.pack);b[f.id]=q+1;self.setState({pack:b});},
+          dec:()=>{if(!q)return;const b=Object.assign({},st.pack);b[f.id]=q-1;if(!b[f.id])delete b[f.id];self.setState({pack:b});}});
+      }),
+      extras:['Sachet refermable','Étiquette message','Emballage cadeau'].map(function(e){
+        const on=st.extra===e;
+        return {label:e,pick:()=>self.setState({extra:e}),bg:on?INK:'rgba(255,255,255,.6)',fg:on?CREAM:INK,bd:on?INK:'rgba(224,118,26,.28)'};
+      }),
+      packBtnLabel:packFull?('Ajouter le pack · '+self.money(pack.price)):('Choisissez encore '+(pack.slots-packCount)+' pot(s)'),
+      packBtnBg:packFull?ACC:'rgba(59,36,21,.35)',
+      addPack:()=>{if(!packFull)return;self.add('pack|'+pack.id,1);self.setState({pack:{}});self.flash(pack.name+' ajouté');self.go('cart');},
+
+      hasCart:count>0,cartEmpty:count===0,cartCount:count,
+      cartLines:keys.map(function(k){
+        return {name:self.lineName(k),imgCss:self.lineImg(k),q:st.cart[k],unit:self.money(self.linePrice(k))+' l\u2019unité',
+          inc:()=>self.add(k,1),dec:()=>self.add(k,-1)};
+      }),
+      totals:[{k:'Sous-total',v:self.money(sub)},{k:isPickup?'Retrait boutique':'Livraison',v:ship?self.money(ship):'Offerte'},
+        {k:'Créneau',v:st.slot},{k:'Option',v:st.extra}],
+      totalLabel:self.money(total),
+      freeShipMsg:sub>=25?'Livraison offerte, c\u2019est acquis':'Encore '+self.money(25-sub)+' pour la livraison offerte',
+      freeShipPct:Math.min(100,Math.round(sub/25*100))+'%',
+
+      steps:[1,2,3].map(n=>({bg:st.step>=n?ACC:'rgba(59,36,21,.12)'})),
+      step1:st.step===1,step2:st.step===2,step3:st.step===3,
+      next:()=>self.setState({step:2}),
+      placeOrder:()=>self.setState({step:3,track:1}),
+      modes:[
+        {label:'Livraison à domicile',note:'Sous 24 h, suivi en direct',price:sub>=25?'Offerte':'2,90 €'},
+        {label:'Retrait en boutique',note:'Atelier Croké, ouvert 9h–19h',price:'Gratuit'},
+        {label:'Revendeur / événement',note:'Dès 50 bouteilles, devis sous 24 h',price:'Sur devis'}
+      ].map(function(m){
+        const on=st.mode===m.label;
+        return Object.assign({},m,{pick:()=>self.setState({mode:m.label}),bg:on?TAN:'#fff',bd:on?ORANGE:'rgba(59,36,21,.1)'});
+      }),
+      slots:['Auj. · 17h–19h','Sam. 22 · 10h–12h','Sam. 22 · 14h–16h','Dim. 23 · 10h–12h'].map(function(s){
+        const on=st.slot===s;
+        return {label:s,pick:()=>self.setState({slot:s}),bg:on?INK:'#fff',fg:on?CREAM:INK,bd:on?INK:'rgba(59,36,21,.1)'};
+      }),
+      fields:[{k:'Nom',v:'Yann Kodjo'},{k:'Téléphone',v:'+33 6 24 88 10 07'},{k:'Adresse',v:'18 rue du Marché, 93100 Montreuil'},{k:'Note au livreur',v:'Interphone 12B, 2e étage'}],
+      pays:[
+        {label:'PayPal',note:'Redirection sécurisée, aucune carte enregistrée'},
+        {label:'Paiement à la livraison',note:'Espèces ou carte auprès du livreur'},
+        {label:'Virement bancaire',note:'IBAN par email, expédition à réception'}
+      ].map(function(p){
+        const on=st.pay===p.label;
+        return Object.assign({},p,{pick:()=>self.setState({pay:p.label}),bg:on?TAN:'#fff',bd:on?ORANGE:'rgba(59,36,21,.1)'});
+      }),
+      orderRef:'#CK-1042',slotLabel:st.slot,modeLabel:st.mode+' · '+st.pay,earnedPoints:Math.round(total*10),
+
+      trackHeadline:trackDefs[Math.min(st.track,4)][0],
+      trackSteps:trackDefs.map(function(t,i){
+        const done=i<=st.track;
+        return {label:t[0],note:t[1],fg:done?INK:'rgba(59,36,21,.35)',
+          dot:done?ACC:'#fff',ring:done?ACC:'rgba(59,36,21,.2)',line:i<st.track?ACC:'rgba(59,36,21,.12)'};
+      }),
+      advanceTrack:()=>self.setState({track:Math.min(4,st.track+1)}),
+
+      accountTiles:[
+        {label:'Mon abonnement',note:'Duo · prochain envoi le 3 sept.',go:()=>self.go('sub')},
+        {label:'Mes adresses',note:'2 enregistrées',go:()=>self.go('account')},
+        {label:'Parrainage',note:'3 € pour vous, 3 € pour eux',go:()=>self.go('account')},
+        {label:'Vue production',note:'Back-office démo',go:()=>self.go('admin')}
+      ],
+      myOrders:[
+        {ref:'#CK-1042',items:'2 × 250 ml + 1 L',date:'Aujourd\u2019hui · 09:04',status:'À la friture',bg:TAN,fg:ORANGE,go:()=>self.go('track')},
+        {ref:'#CK-1019',items:'Caisse Partage',date:'6 août',status:'Livré',bg:'#E9EDE2',fg:'#5C7146',go:()=>self.go('track')},
+        {ref:'#CK-0994',items:'4 × 150 ml',date:'24 juillet',status:'Livré',bg:'#E9EDE2',fg:'#5C7146',go:()=>self.go('track')}
+      ],
+
+      plans:plans.map(function(p){
+        const on=st.plan===p.name;
+        return Object.assign({},p,{pick:()=>self.setState({plan:p.name}),
+          bg:on?INK:'#fff',fg:on?CREAM:INK,bd:on?INK:'rgba(59,36,21,.1)',chipBg:on?'rgba(247,234,210,.14)':TAN});
+      }),
+      subLabel:(plans.filter(p=>p.name===st.plan)[0]||plans[1]).price,
+
+      bars:[{n:'5',w:'88%'},{n:'4',w:'9%'},{n:'3',w:'2%'},{n:'2',w:'1%'},{n:'1',w:'0%'}],
+      reviews:[
+        {who:'Yann K.',stars:'★★★★★',text:'Le 1 L cacao ne survit pas au trajet retour. Croquant parfait, pas grasse du tout.',what:'Cacao · 1 L',when:'il y a 2 jours'},
+        {who:'Fatou D.',stars:'★★★★★',text:'La coco est incroyable, on sent la torréfaction. Le pot refermable change tout, ça reste croquant une semaine.',what:'Noix de coco · 350 ml',when:'il y a 5 jours'},
+        {who:'Marc L.',stars:'★★★★☆',text:'Orange très parfumée, j\u2019aurais aimé un poil moins sucré. Le format 150 ml est parfait pour le bureau.',what:'Orange · 150 ml',when:'il y a 2 semaines'},
+        {who:'Bureau Nova',stars:'★★★★★',text:'Abonnement Bureau depuis mars : 6 bouteilles par mois, facture unique, jamais un retard.',what:'Abonnement Bureau',when:'il y a 1 mois'}
+      ],
+      values:[
+        {k:'Frit puis enrobé à froid',v:'L\u2019enrobage ne cuit pas : le goût du cacao ou du zeste reste intact.'},
+        {k:'Aucun conservateur',v:'Uniquement blé, huile, sucre, sel et la saveur choisie.'},
+        {k:'Pot refermable',v:'Trois semaines de croquant, même après ouverture.'},
+        {k:'Prix au volume',v:'Plus le format est grand, moins le litre coûte cher — 9 € le litre en bouteille.'}
+      ],
+
+      kpis:[{k:'CA du jour',v:'318 €',d:'+12 % vs hier'},{k:'Commandes',v:'41',d:'6 à préparer'},{k:'Panier moyen',v:'7,80 €',d:'+0,60 €'},{k:'Note',v:'4,8',d:'164 avis'}],
+      stock:[{name:'Cacao',n:'18 L / 30',w:'60%',color:'#8B4A22'},{name:'Nature',n:'26 L / 30',w:'87%',color:'#6F7A2E'},
+        {name:'Noix de coco',n:'9 L / 25',w:'36%',color:'#9C8757'},{name:'Orange',n:'14 L / 25',w:'56%',color:ORANGE}],
+      adminOrders:ORDERS.map(function(o){
+        const s=st.statuses[o.ref], style=STATUS_STYLE[s]||['#EFE6D0',INK];
+        return {ref:o.ref,who:o.who,total:o.total,detail:o.detail,slot:o.slot,status:s,bg:style[0],fg:style[1],
+          open:()=>{self.setState({orderRefSel:o.ref});self.go('adminOrder');}};
+      })
+    };
+  }
+}
+
+</script>
+</body>
+</html>
